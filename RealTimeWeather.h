@@ -18,5 +18,6 @@
 @property (nonatomic, assign) NSString *date;
 @property (nonatomic, assign) NSString *humidty;
 @property (nonatomic, assign) NSString *weatherTemp;
+@property (nonatomic, assign) NSString *img;
 
 @end

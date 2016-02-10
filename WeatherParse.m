@@ -46,6 +46,8 @@ static WeatherParse *sharedManager = nil;
     real.weatherCondition = [weatherDict valueForKey:@"info"];
     real.weatherTemp = [NSString stringWithFormat:@"%@°",[weatherDict valueForKey:@"temperature"]];
     real.humidty = [weatherDict valueForKey:@"humidity"];
+    real.img = [weatherDict valueForKey:@"img"];
+    
     
     return real;
 }
