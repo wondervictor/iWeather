@@ -10,6 +10,32 @@
 
 @implementation TabBar
 
+- (id)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    if (self) {
+        
+    }
+    return self;
+}
+
+- (void)configureSubButtons{
+    
+}
+
+- (void)configureCenterButton{
+    
+}
+
+- (void)configureTabButtons{
+    
+}
+
+// UIAmimation for Sub Buttons
+
+
+
+
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

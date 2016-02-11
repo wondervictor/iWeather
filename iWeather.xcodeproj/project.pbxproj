@@ -24,6 +24,8 @@
 		2EB229601C6B2E46003E64B3 /* RealTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB2295F1C6B2E46003E64B3 /* RealTimeView.m */; };
 		2EB229621C6B39D8003E64B3 /* ImageList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EB229611C6B39D8003E64B3 /* ImageList.plist */; };
 		2EB229651C6B7456003E64B3 /* TabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229641C6B7456003E64B3 /* TabBar.m */; };
+		2EB229681C6C53B4003E64B3 /* CenterButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229671C6C53B4003E64B3 /* CenterButton.m */; };
+		2EB2296B1C6C7084003E64B3 /* subButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB2296A1C6C7084003E64B3 /* subButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +77,10 @@
 		2EB229611C6B39D8003E64B3 /* ImageList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ImageList.plist; sourceTree = "<group>"; };
 		2EB229631C6B7456003E64B3 /* TabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBar.h; sourceTree = "<group>"; };
 		2EB229641C6B7456003E64B3 /* TabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBar.m; sourceTree = "<group>"; };
+		2EB229661C6C53B4003E64B3 /* CenterButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CenterButton.h; sourceTree = "<group>"; };
+		2EB229671C6C53B4003E64B3 /* CenterButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CenterButton.m; sourceTree = "<group>"; };
+		2EB229691C6C7084003E64B3 /* subButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = subButton.h; sourceTree = "<group>"; };
+		2EB2296A1C6C7084003E64B3 /* subButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = subButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +196,10 @@
 				2EB2295F1C6B2E46003E64B3 /* RealTimeView.m */,
 				2EB229631C6B7456003E64B3 /* TabBar.h */,
 				2EB229641C6B7456003E64B3 /* TabBar.m */,
+				2EB229661C6C53B4003E64B3 /* CenterButton.h */,
+				2EB229671C6C53B4003E64B3 /* CenterButton.m */,
+				2EB229691C6C7084003E64B3 /* subButton.h */,
+				2EB2296A1C6C7084003E64B3 /* subButton.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -347,8 +357,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EB229681C6C53B4003E64B3 /* CenterButton.m in Sources */,
 				2EB229651C6B7456003E64B3 /* TabBar.m in Sources */,
 				2E0AB6181C6AE72300D8CFC0 /* WeekWeather.m in Sources */,
+				2EB2296B1C6C7084003E64B3 /* subButton.m in Sources */,
 				2E0AB6121C6AE6F900D8CFC0 /* WeatherParse.m in Sources */,
 				2E0AB59D1C6A4BE700D8CFC0 /* AppDelegate.m in Sources */,
 				2E0AB60F1C6AE38B00D8CFC0 /* MainViewController.m in Sources */,
