@@ -14,9 +14,10 @@
 - (void)touchAtIndex:(NSInteger)index;
 
 - (void)centerButtonClick;
-- (void)subButton_0_Action;     // 搜索
-- (void)subButton_1_Action;     // 整理
-- (void)subButton_2_Action;     // about me
+- (void)subButton_0_Action;     //整理
+- (void)subButton_1_Action;     //setting
+- (void)subButton_2_Action;     //search
+- (void)subBUtton_3_Action;     //about
 
 @end
 
@@ -28,6 +29,7 @@
     CGPoint kSubButton_0_AppearLocation;
     CGPoint kSubButton_1_AppearLocation;
     CGPoint kSubButton_2_AppearLocation;
+    CGPoint kSubButton_3_AppearLocation;
 
 }
 
