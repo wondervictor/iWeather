@@ -12,11 +12,12 @@
 
 #import "RealTimeView.h"
 #import "RealTimeWeather.h"
+#import "TabBar.h"
 
 
 
 #import "MainViewController.h"
-@interface MainViewController()<UIScrollViewDelegate>
+@interface MainViewController()<UIScrollViewDelegate,TabBarDelegate>
 {
     
 }
@@ -29,7 +30,7 @@
 
 @property (nonatomic, strong) NSMutableArray *cityListArray;
 
-
+@property (nonatomic, strong) TabBar *tabBar;
 
 
 @end
@@ -59,9 +60,22 @@
     
     RealTimeView *view = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 64, XWIDTH, 500) withRealTimeWeather:weather];
     [self.view addSubview:view];
-     */
+    */
     
     
+    CGFloat settingWidth = 150;
+    if (XWIDTH <375) {
+        settingWidth = 120;
+    }
+    self.tabBar = [[TabBar alloc]initTabBarWithFrame:CGRectMake(0, XHEIGHT-50, XWIDTH, 50) withTotalRadius:settingWidth centerRadius:25 subRadius:20 centerImage:@"main" subImages:^(TabBar *tb)
+    {
+        [tb subButtonImage:@"search" withTag:0];
+        [tb subButtonImage:@"add" withTag:1];
+        [tb subButtonImage:@"setting" withTag:2];
+        [tb subButtonImage:@"about" withTag:3];
+    } locationX:0 locationY:0];
+    self.tabBar.delegate = self;
+    [self.view addSubview:self.tabBar];
    
 }
 
@@ -74,6 +88,42 @@
 {
     
 }
+
+#pragma mark  TabBarDelegate
+
+- (void)subButton_0_Action {
+    
+}
+
+- (void)subButton_1_Action {
+    
+}
+
+- (void)subButton_2_Action {
+    
+}
+
+- (void)subButton_3_Action {
+    
+}
+
+
+- (void)touchAtIndex:(NSInteger)index {
+    if (index == 0) {
+        NSLog(@"2");
+    }
+    else if (index == 1) {
+        NSLog(@"saf");
+    }
+    else if (index == 2) {
+        NSLog(@"afsg");
+    }
+    else if (index == 3) {
+        NSLog(@"afew");
+    }
+}
+
+
 
 
 - (UIStatusBarStyle)preferredStatusBarStyle{

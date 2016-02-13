@@ -13,24 +13,32 @@
 @protocol TabBarDelegate <NSObject>
 - (void)touchAtIndex:(NSInteger)index;
 
-- (void)centerButtonClick;
-- (void)subButton_0_Action;     //整理
-- (void)subButton_1_Action;     //setting
-- (void)subButton_2_Action;     //search
-- (void)subBUtton_3_Action;     //about
+//- (void)centerButtonClick;
+- (void)subButton_0_Action;     // search
+- (void)subButton_1_Action;     // add
+- (void)subButton_2_Action;     // setting
+- (void)subButton_3_Action;     // about
 
 @end
 
 
 @interface TabBar : UIView<subButtonDelegate>
 {
+    // SubButton
     CGPoint kSubButtonBirthLocation;
     CGPoint kSubButtonFinalLocation;
     CGPoint kSubButton_0_AppearLocation;
     CGPoint kSubButton_1_AppearLocation;
     CGPoint kSubButton_2_AppearLocation;
     CGPoint kSubButton_3_AppearLocation;
+ 
+    // TabBar Button
+    CGPoint kTabButton_0_Location;
+    CGPoint kTabButton_1_Location;
+    CGPoint kTabButton_2_Location;
+    CGPoint kTabButton_3_Location;
 
+    
 }
 
 @property (nonatomic, weak) id<TabBarDelegate> delegate;
@@ -38,6 +46,7 @@
 @property (nonatomic, strong) subButton *subBtn;
 @property (nonatomic, strong) NSMutableArray *subButtons;
 @property (nonatomic, strong) NSMutableArray *tabButtons;
+@property (nonatomic, strong) NSArray *tabBtnLocationXs;
 
 @property (nonatomic, getter = isExpanded) BOOL expanded;
 @property (nonatomic) CGFloat totalRadius;
