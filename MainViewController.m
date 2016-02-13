@@ -10,6 +10,9 @@
 #define XWIDTH  self.view.frame.size.width
 #define DEFAULT_COLOR [UIColor colorWithRed:74/255.0 green:74/255.0 blue:74/255.0 alpha:1.0]
 
+#import "OneNetWork.h"
+#import "WeatherParse.h"
+
 #import "RealTimeView.h"
 #import "RealTimeWeather.h"
 #import "TabBar.h"
@@ -81,6 +84,26 @@
     // self.tabBar.layer.borderColor = [UIColor blackColor].CGColor;
     // self.tabBar.layer.borderWidth = 0.3f;
     [self.view addSubview:self.tabBar];
+    NSDictionary *requestParams = @{@"cityname":@"宜昌",@"dtype":@"json",@"key":@"5e9055bef55f2e0ac8e3fdb4c0315629"};
+    WeatherParse *paser = [WeatherParse sharedManager];
+    __block RealTimeWeather *weather = [[RealTimeWeather alloc]init];
+    
+    NSString *urlString = @"http://op.juhe.cn/onebox/weather/query?";
+    
+    OneNetWork *oneNetWork = [OneNetWork sharedManager];
+    [oneNetWork asynchronousRequestWithURLString:urlString WithRequestMethod:@"POST" params:requestParams withCompletion:^(NSData *data, NSURLResponse *response) {
+      //  NSLog(@"%@",data);
+        NSDictionary *dict = [paser getWeatherData:data];
+        NSLog(@"%@",dict);
+        weather = [paser parseRealTimeWeather:dict];
+        NSLog(@"%@",weather.cityName);
+        
+        
+    } withError:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+    NSLog(@"%@",weather.cityName);
    
 }
 

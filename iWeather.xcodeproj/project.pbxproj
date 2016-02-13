@@ -27,6 +27,7 @@
 		2EB2296B1C6C7084003E64B3 /* subButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB2296A1C6C7084003E64B3 /* subButton.m */; };
 		2EB229711C6F0F5C003E64B3 /* BarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229701C6F0F5C003E64B3 /* BarButton.m */; };
 		2EB229741C6F12C1003E64B3 /* UIButton+UIImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229731C6F12C1003E64B3 /* UIButton+UIImage.m */; };
+		2EB229781C6F4B68003E64B3 /* OneNetWork.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229771C6F4B68003E64B3 /* OneNetWork.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +85,8 @@
 		2EB229701C6F0F5C003E64B3 /* BarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarButton.m; sourceTree = "<group>"; };
 		2EB229721C6F12C1003E64B3 /* UIButton+UIImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+UIImage.h"; sourceTree = "<group>"; };
 		2EB229731C6F12C1003E64B3 /* UIButton+UIImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+UIImage.m"; sourceTree = "<group>"; };
+		2EB229761C6F4B68003E64B3 /* OneNetWork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneNetWork.h; sourceTree = "<group>"; };
+		2EB229771C6F4B68003E64B3 /* OneNetWork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneNetWork.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +118,7 @@
 		2E0AB58C1C6A4BE700D8CFC0 = {
 			isa = PBXGroup;
 			children = (
+				2EB229751C6F4B28003E64B3 /* OneNetWork */,
 				2EB2296C1C6CF272003E64B3 /* Resources */,
 				2E0AB61C1C6AE73F00D8CFC0 /* Frameworks */,
 				2E0AB5CD1C6ABF2500D8CFC0 /* Controller */,
@@ -249,6 +253,15 @@
 				2EB2295F1C6B2E46003E64B3 /* RealTimeView.m */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		2EB229751C6F4B28003E64B3 /* OneNetWork */ = {
+			isa = PBXGroup;
+			children = (
+				2EB229761C6F4B68003E64B3 /* OneNetWork.h */,
+				2EB229771C6F4B68003E64B3 /* OneNetWork.m */,
+			);
+			name = OneNetWork;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -386,6 +399,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EB229781C6F4B68003E64B3 /* OneNetWork.m in Sources */,
 				2EB229651C6B7456003E64B3 /* TabBar.m in Sources */,
 				2E0AB6181C6AE72300D8CFC0 /* WeekWeather.m in Sources */,
 				2EB2296B1C6C7084003E64B3 /* subButton.m in Sources */,
