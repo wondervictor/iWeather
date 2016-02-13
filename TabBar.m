@@ -172,8 +172,8 @@
     
     self.tabButtons = [[NSMutableArray alloc]init];
     for (NSInteger i = 0; i < 4; i++) {
-       //BarButton *button = [[BarButton alloc]init];
-        UIButton *button = [[UIButton alloc]init];
+        BarButton *button = [[BarButton alloc]init];
+        //UIButton *button = [[UIButton alloc]init];
         button.backgroundColor = [UIColor clearColor];
         button.frame = CGRectMake(0, 0, btnWidth, 50);
         if (i > 1) {
@@ -184,31 +184,13 @@
         }
         
         [button setImage:[UIImage imageNamed:[imageArray objectAtIndex:i]] withTitle:[titlesArray objectAtIndex:i] forState:UIControlStateNormal];
-        [button setTitle:[titlesArray objectAtIndex:i] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-
+        button.delegate = self;
         button.layer.zPosition = 1;
         [self addSubview:button];
         [self.tabButtons addObject:button];
         
     }
     
-}
-
-- (void)btnClick:(UIButton *)sender {
-    if (sender == [self.tabButtons objectAtIndex:0]) {
-        [_delegate touchAtIndex:0];
-    }
-    else if (sender == [self.tabButtons objectAtIndex:1]) {
-        [_delegate touchAtIndex:1];
-    }
-    else if (sender == [self.tabButtons objectAtIndex:2]) {
-        [_delegate touchAtIndex:2];
-    }
-    else if (sender == [self.tabButtons objectAtIndex:3]) {
-        [_delegate touchAtIndex:3];
-    }
-
 }
 
 
@@ -270,6 +252,44 @@
     }
     else if ([_delegate respondsToSelector:@selector(subButton_3_Action)]&&button == [self.subButtons objectAtIndex:3]) {
         [_delegate subButton_3_Action];
+    }
+}
+
+
+#pragma mark  - BarButtonDelegate
+- (void)barButtonFirstPress:(BarButton *)sender {
+    if (sender == [self.tabButtons objectAtIndex:0]) {
+        [_delegate firstTouchAtIndex:0 button:sender];
+    }
+    else if (sender == [self.tabButtons objectAtIndex:1])
+    {
+        [_delegate firstTouchAtIndex:1 button:sender];
+    }
+    else if (sender == [self.tabButtons objectAtIndex:2])
+    {
+        [_delegate firstTouchAtIndex:2 button:sender];
+    }
+    else if (sender == [self.tabButtons objectAtIndex:3])
+    {
+        [_delegate firstTouchAtIndex:3 button:sender];
+    }
+}
+
+- (void)barButtonSecondPress:(BarButton *)sender {
+    if (sender == [self.tabButtons objectAtIndex:0]) {
+        [_delegate secondTouchAtIndex:0 button:sender];
+    }
+    else if (sender == [self.tabButtons objectAtIndex:1])
+    {
+        [_delegate secondTouchAtIndex:1 button:sender];
+    }
+    else if (sender == [self.tabButtons objectAtIndex:2])
+    {
+        [_delegate secondTouchAtIndex:2 button:sender];
+    }
+    else if (sender == [self.tabButtons objectAtIndex:3])
+    {
+        [_delegate secondTouchAtIndex:3 button:sender];
     }
 }
 

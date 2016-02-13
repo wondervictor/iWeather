@@ -12,7 +12,8 @@
 #import <UIKit/UIKit.h>
 
 @protocol TabBarDelegate <NSObject>
-- (void)touchAtIndex:(NSInteger)index;
+- (void)firstTouchAtIndex:(NSInteger)index button:(BarButton *)sender;
+- (void)secondTouchAtIndex:(NSInteger)index button:(BarButton *)sender;
 
 //- (void)centerButtonClick;
 - (void)subButton_0_Action;     // search
@@ -23,7 +24,7 @@
 @end
 
 
-@interface TabBar : UIView<subButtonDelegate>
+@interface TabBar : UIView<subButtonDelegate,BarButtonDelegate>
 {
     // SubButton
     CGPoint kSubButtonBirthLocation;

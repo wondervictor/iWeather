@@ -113,22 +113,36 @@
 }
 
 //  Tab Bar Button Press Event
-- (void)touchAtIndex:(NSInteger)index {
+- (void)firstTouchAtIndex:(NSInteger)index button:(BarButton *)sender {
     if (index == 0) {
-       
+        NSLog(@"1 first");
     }
     else if (index == 1) {
-        
+        NSLog(@"2 first");
     }
     else if (index == 2) {
-        
+        NSLog(@"3 first");
     }
     else if (index == 3) {
-        
+        NSLog(@"4 first");
     }
+    
 }
 
-
+- (void)secondTouchAtIndex:(NSInteger)index button:(BarButton *)sender {
+    if (index == 0) {
+        NSLog(@"1 second");
+    }
+    else if (index == 1) {
+        NSLog(@"2 second");
+    }
+    else if (index == 2) {
+        NSLog(@"3 second");
+    }
+    else if (index == 3) {
+        NSLog(@"4 second");
+    }
+}
 
 
 - (UIStatusBarStyle)preferredStatusBarStyle{

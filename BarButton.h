@@ -12,7 +12,8 @@
 
 @protocol BarButtonDelegate <NSObject>
 
-- (void)BarButtonPress:(BarButton *)sender;
+- (void)barButtonFirstPress:(BarButton *)sender;
+- (void)barButtonSecondPress:(BarButton *)sender;
 
 @end
 
@@ -20,7 +21,6 @@
 
 @property (nonatomic, weak) id<BarButtonDelegate> delegate;
 
-@property (nonatomic, strong) UIImageView *barImageView;
-@property (nonatomic, strong) UILabel *barLabel;
+@property (nonatomic, getter=isTouched) BOOL touched;
 
 @end
