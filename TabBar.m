@@ -6,8 +6,9 @@
 //  Copyright © 2016年 VicChan. All rights reserved.
 //
 
-#import "TabBar.h"
 
+#import "TabBar.h"
+#import "UIButton+UIImage.h"
 
 #define ConvertAngleToRadian(x) ((x)*M_PI / 180)
 #define kSubButtonRotationNormal   1
@@ -166,8 +167,12 @@
     kTabButton_2_Location = CGPointMake(60+5*btnWidth/2, 25);
     kTabButton_3_Location = CGPointMake(60+7*btnWidth/2, 25);
     
+    NSArray *titlesArray = @[@"weekTemp",@"PM 2.5",@"Location",@"Info"];
+    NSArray *imageArray = @[@"week1",@"pm251",@"location1",@"info1"];
+    
     self.tabButtons = [[NSMutableArray alloc]init];
     for (NSInteger i = 0; i < 4; i++) {
+       //BarButton *button = [[BarButton alloc]init];
         UIButton *button = [[UIButton alloc]init];
         button.backgroundColor = [UIColor clearColor];
         button.frame = CGRectMake(0, 0, btnWidth, 50);
@@ -177,7 +182,11 @@
         else {
             button.center = CGPointMake((2*i+1)*btnWidth/2, 25);
         }
+        
+        [button setImage:[UIImage imageNamed:[imageArray objectAtIndex:i]] withTitle:[titlesArray objectAtIndex:i] forState:UIControlStateNormal];
+        [button setTitle:[titlesArray objectAtIndex:i] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+
         button.layer.zPosition = 1;
         [self addSubview:button];
         [self.tabButtons addObject:button];

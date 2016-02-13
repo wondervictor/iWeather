@@ -7,6 +7,7 @@
 //
 
 #import "subButton.h"
+#import "BarButton.h"
 
 #import <UIKit/UIKit.h>
 
@@ -33,10 +34,10 @@
     CGPoint kSubButton_3_AppearLocation;
  
     // TabBar Button
-    CGPoint kTabButton_0_Location;
-    CGPoint kTabButton_1_Location;
-    CGPoint kTabButton_2_Location;
-    CGPoint kTabButton_3_Location;
+    CGPoint kTabButton_0_Location;    //  week temp
+    CGPoint kTabButton_1_Location;    //  PM 2.5
+    CGPoint kTabButton_2_Location;    //  Location
+    CGPoint kTabButton_3_Location;    //  info
 
     
 }

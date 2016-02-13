@@ -25,6 +25,8 @@
 		2EB229621C6B39D8003E64B3 /* ImageList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EB229611C6B39D8003E64B3 /* ImageList.plist */; };
 		2EB229651C6B7456003E64B3 /* TabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229641C6B7456003E64B3 /* TabBar.m */; };
 		2EB2296B1C6C7084003E64B3 /* subButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB2296A1C6C7084003E64B3 /* subButton.m */; };
+		2EB229711C6F0F5C003E64B3 /* BarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229701C6F0F5C003E64B3 /* BarButton.m */; };
+		2EB229741C6F12C1003E64B3 /* UIButton+UIImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229731C6F12C1003E64B3 /* UIButton+UIImage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +80,10 @@
 		2EB229641C6B7456003E64B3 /* TabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBar.m; sourceTree = "<group>"; };
 		2EB229691C6C7084003E64B3 /* subButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = subButton.h; sourceTree = "<group>"; };
 		2EB2296A1C6C7084003E64B3 /* subButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = subButton.m; sourceTree = "<group>"; };
+		2EB2296F1C6F0F5C003E64B3 /* BarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarButton.h; sourceTree = "<group>"; };
+		2EB229701C6F0F5C003E64B3 /* BarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarButton.m; sourceTree = "<group>"; };
+		2EB229721C6F12C1003E64B3 /* UIButton+UIImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+UIImage.h"; sourceTree = "<group>"; };
+		2EB229731C6F12C1003E64B3 /* UIButton+UIImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+UIImage.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +234,10 @@
 				2EB2296A1C6C7084003E64B3 /* subButton.m */,
 				2EB229631C6B7456003E64B3 /* TabBar.h */,
 				2EB229641C6B7456003E64B3 /* TabBar.m */,
+				2EB2296F1C6F0F5C003E64B3 /* BarButton.h */,
+				2EB229701C6F0F5C003E64B3 /* BarButton.m */,
+				2EB229721C6F12C1003E64B3 /* UIButton+UIImage.h */,
+				2EB229731C6F12C1003E64B3 /* UIButton+UIImage.m */,
 			);
 			name = TabBarView;
 			sourceTree = "<group>";
@@ -384,8 +394,10 @@
 				2E0AB60F1C6AE38B00D8CFC0 /* MainViewController.m in Sources */,
 				2E0AB59A1C6A4BE700D8CFC0 /* main.m in Sources */,
 				2E0AB61B1C6AE73400D8CFC0 /* LifeWeather.m in Sources */,
+				2EB229711C6F0F5C003E64B3 /* BarButton.m in Sources */,
 				2E0AB6151C6AE70F00D8CFC0 /* RealTimeWeather.m in Sources */,
 				2EB229601C6B2E46003E64B3 /* RealTimeView.m in Sources */,
+				2EB229741C6F12C1003E64B3 /* UIButton+UIImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

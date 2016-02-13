@@ -62,6 +62,9 @@
     [self.view addSubview:view];
     */
     
+    //NSLog(@"%@", [title sizeWithFont:HELVETICANEUEMEDIUM_FONT(12.0f)];);
+    
+    
     
     CGFloat settingWidth = 150;
     if (XWIDTH <375) {
@@ -75,6 +78,8 @@
         [tb subButtonImage:@"about" withTag:3];
     } locationX:0 locationY:0];
     self.tabBar.delegate = self;
+    // self.tabBar.layer.borderColor = [UIColor blackColor].CGColor;
+    // self.tabBar.layer.borderWidth = 0.3f;
     [self.view addSubview:self.tabBar];
    
 }
@@ -107,19 +112,19 @@
     
 }
 
-
+//  Tab Bar Button Press Event
 - (void)touchAtIndex:(NSInteger)index {
     if (index == 0) {
-        NSLog(@"2");
+       
     }
     else if (index == 1) {
-        NSLog(@"saf");
+        
     }
     else if (index == 2) {
-        NSLog(@"afsg");
+        
     }
     else if (index == 3) {
-        NSLog(@"afew");
+        
     }
 }
 
