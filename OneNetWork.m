@@ -31,6 +31,7 @@ static OneNetWork *sharedManager = nil;
         _session = [NSURLSession sharedSession];
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
         configuration.timeoutIntervalForRequest = 10;//超时请求
+        configuration.allowsCellularAccess = YES;
         _session = [NSURLSession sessionWithConfiguration:configuration];
     }
     return _session;
@@ -115,54 +116,14 @@ static OneNetWork *sharedManager = nil;
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ 
+ DownLoad 
+ UpLoad
+ Parse Data
+ Socket
+ 
+ */
 
 
 

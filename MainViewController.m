@@ -9,7 +9,6 @@
 #define XHEIGHT self.view.frame.size.height
 #define XWIDTH  self.view.frame.size.width
 #define DEFAULT_COLOR [UIColor colorWithRed:74/255.0 green:74/255.0 blue:74/255.0 alpha:1.0]
-
 //  Model
 #import "OneNetWork.h"
 #import "WeatherParse.h"
@@ -31,7 +30,7 @@
 @property (nonatomic, strong) UIPageControl *pageControl;
 
 @property (nonatomic) NSInteger numberOfCities;
-
+//城市
 @property (nonatomic, strong) NSMutableArray *cityListArray;
 
 @property (nonatomic, strong) TabBar *tabBar;
@@ -40,10 +39,22 @@
 
 @end
 
+/**
+ plist 存储城市数据.
+ 
+ 
+ */
+
+
+
+
 @implementation MainViewController
 - (void)viewDidLoad{
     [super viewDidLoad];
     self.view.backgroundColor = DEFAULT_COLOR;
+    self.numberOfCities = [self getNumberOfCities];
+    
+    
     /*
     CGRect scrollViewRect = CGRectMake(0, 64, XWIDTH, XHEIGHT-124);
     self.weatherScrollView = [[UIScrollView alloc]initWithFrame:scrollViewRect];
@@ -66,8 +77,6 @@
     RealTimeView *view = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 64, XWIDTH, 500) withRealTimeWeather:weather];
     [self.view addSubview:view];
     */
-    
-    //NSLog(@"%@", [title sizeWithFont:HELVETICANEUEMEDIUM_FONT(12.0f)];);
     
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
@@ -92,8 +101,19 @@
     
 }
 
+- (NSInteger)getNumberOfCities {
+    
+    
+    
+    NSInteger num = [self.cityListArray count];
+    return num;
+}
 
-
+- (NSString *)cityListDataFile {
+    
+    
+    return nil;
+}
 
 
 #pragma  mark  UIScrollViewDelegate

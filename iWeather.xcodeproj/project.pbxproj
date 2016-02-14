@@ -29,6 +29,7 @@
 		2EB229741C6F12C1003E64B3 /* UIButton+UIImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229731C6F12C1003E64B3 /* UIButton+UIImage.m */; };
 		2EB229781C6F4B68003E64B3 /* OneNetWork.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229771C6F4B68003E64B3 /* OneNetWork.m */; };
 		2EB229C01C7022AC003E64B3 /* WeatherRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229BF1C7022AC003E64B3 /* WeatherRequest.m */; };
+		2EB229C31C704583003E64B3 /* ConditionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229C21C704583003E64B3 /* ConditionView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +91,8 @@
 		2EB229771C6F4B68003E64B3 /* OneNetWork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneNetWork.m; sourceTree = "<group>"; };
 		2EB229BE1C7022AC003E64B3 /* WeatherRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeatherRequest.h; path = iWeather/WeatherRequest.h; sourceTree = "<group>"; };
 		2EB229BF1C7022AC003E64B3 /* WeatherRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeatherRequest.m; path = iWeather/WeatherRequest.m; sourceTree = "<group>"; };
+		2EB229C11C704583003E64B3 /* ConditionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConditionView.h; sourceTree = "<group>"; };
+		2EB229C21C704583003E64B3 /* ConditionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConditionView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,6 +251,8 @@
 			children = (
 				2EB2295E1C6B2E46003E64B3 /* RealTimeView.h */,
 				2EB2295F1C6B2E46003E64B3 /* RealTimeView.m */,
+				2EB229C11C704583003E64B3 /* ConditionView.h */,
+				2EB229C21C704583003E64B3 /* ConditionView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -421,6 +426,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EB229781C6F4B68003E64B3 /* OneNetWork.m in Sources */,
+				2EB229C31C704583003E64B3 /* ConditionView.m in Sources */,
 				2EB229651C6B7456003E64B3 /* TabBar.m in Sources */,
 				2EB229C01C7022AC003E64B3 /* WeatherRequest.m in Sources */,
 				2E0AB6181C6AE72300D8CFC0 /* WeekWeather.m in Sources */,
