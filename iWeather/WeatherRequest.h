@@ -24,6 +24,6 @@
 @property (nonatomic, weak) id<WeatherRequestDelegate> delegate;
 
 - (id)initRequest;
-- (void)startRequest;
+- (void)startRequestWithCityName:(NSString *)cityname;
 
 @end

@@ -19,8 +19,8 @@
     return self;
 }
 
-- (void)startRequest {
-    NSDictionary *requestParams = @{@"cityname":@"宜昌",
+- (void)startRequestWithCityName:(NSString *)cityname {
+    NSDictionary *requestParams = @{@"cityname":cityname,
                                     @"dtype":@"json",
                                     @"key":@"5e9055bef55f2e0ac8e3fdb4c0315629"};
     OneNetWork *oneNetWork = [OneNetWork sharedManager];

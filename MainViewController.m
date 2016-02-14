@@ -71,7 +71,9 @@
     
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
-    [self.requestEngine startRequest];
+    //[self.requestEngine startRequest];
+    [self.requestEngine startRequestWithCityName:@"宜昌"];
+    
     
     CGFloat settingWidth = 150;
     if (XWIDTH <375) {
