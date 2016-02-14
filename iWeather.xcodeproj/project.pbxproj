@@ -430,6 +430,11 @@
 					2E0AB5941C6A4BE700D8CFC0 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 23D5PVYLWJ;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					2E0AB5AD1C6A4BE800D8CFC0 = {
 						CreatedOnToolsVersion = 7.2;

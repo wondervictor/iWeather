@@ -19,8 +19,11 @@
 #import "TabBar.h"
 //  Controller
 #import "MainViewController.h"
+//  Frameworks
+#import <CoreLocation/CoreLocation.h>
+#import <CoreLocation/CLLocationManagerDelegate.h>
 
-@interface MainViewController()<UIScrollViewDelegate,TabBarDelegate,WeatherRequestDelegate>
+@interface MainViewController()<UIScrollViewDelegate,TabBarDelegate,WeatherRequestDelegate,CLLocationManagerDelegate>
 {
     
 }
@@ -37,23 +40,41 @@
 // request
 @property (nonatomic, strong) WeatherRequest *requestEngine;
 
+
+
+//  CLLocation
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) NSString *locationCityName;
+
+
 @end
 
 /**
- plist 存储城市数据.
- 
- 
+   *  plist 存储城市数据.
+   *  Today's Weather Extension;
+   *  缓存.
  */
 
 
 
 
 @implementation MainViewController
+
+- (CLLocationManager *)locationManager {
+    if (_locationManager == nil) {
+        self.locationManager = [[CLLocationManager alloc]init];
+    }
+    return _locationManager;
+}
+
 - (void)viewDidLoad{
     [super viewDidLoad];
     self.view.backgroundColor = DEFAULT_COLOR;
     self.cityListArray = [[NSMutableArray alloc]init];
     self.numberOfCities = [self getNumberOfCities];
+    
+    
+    
     //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     /*
@@ -82,6 +103,14 @@
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
     [self.requestEngine startRequestWithCityName:@"宜昌"];
+    // Core Location
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.delegate = self;
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
+        [self.locationManager requestWhenInUseAuthorization];
+        [self.locationManager requestAlwaysAuthorization];
+    }
+    [self locate];
     
     
     CGFloat settingWidth = 150;
@@ -98,6 +127,14 @@
     self.tabBar.delegate = self;
     [self.view addSubview:self.tabBar];
   
+    
+}
+
+- (void)reloadView {
+    
+}
+
+- (void)refreshData {
     
 }
 
@@ -134,11 +171,11 @@
 }
 
 - (void)subButton_1_Action {
-    
+
 }
 
 - (void)subButton_2_Action {
-    
+
 }
 
 - (void)subButton_3_Action {
@@ -196,8 +233,71 @@
     
 }
 
+- (void)locate {
+    [self.locationManager startUpdatingLocation];
+}
+
+#pragma mark  -  CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    CLLocation *currentLocation = [locations lastObject];
+    CLGeocoder *geocoder = [[CLGeocoder alloc]init];
+    [geocoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        if (placemarks.count > 0) {
+
+            CLPlacemark *placeMark = [placemarks objectAtIndex:0];
+            self.locationCityName = placeMark.locality;
+            NSLog(@"%@",placeMark.locality);
+            NSLog(@"%@",placeMark.subLocality);
+
+            if (!placeMark) {
+               //  error;
+            }
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                
+                });
+            });
+        }
+        else if (error) {
+            NSLog(@"Location error: %@",error);
+        }
+        
+    }];
+    
+    
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"error: %@",error);
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    
+    if (status == kCLAuthorizationStatusAuthorizedAlways) {
+        NSLog(@"Authorized");
+    } else if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        NSLog(@"AuthorizedWhenInUse");
+    } else if (status == kCLAuthorizationStatusDenied) {
+        NSLog(@"Denied");
+    } else if (status == kCLAuthorizationStatusRestricted) {
+        NSLog(@"Restricted");
+    } else if (status == kCLAuthorizationStatusNotDetermined) {
+        NSLog(@"NotDetermined");
+    }
+    
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.locationManager stopUpdatingLocation];
+    
 }
 
 - (void)didReceiveMemoryWarning {
