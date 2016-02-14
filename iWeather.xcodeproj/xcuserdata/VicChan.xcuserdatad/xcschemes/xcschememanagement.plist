@@ -4,6 +4,21 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>MyToday.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>Today‘s Weather.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>Weather.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>iWeather.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -23,6 +38,21 @@
 			<true/>
 		</dict>
 		<key>2E0AB5B81C6A4BE800D8CFC0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2EB229C81C707A4C003E64B3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2EB229DE1C707BA0003E64B3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2EB229F21C707BCB003E64B3</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -52,8 +52,9 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     self.view.backgroundColor = DEFAULT_COLOR;
+    self.cityListArray = [[NSMutableArray alloc]init];
     self.numberOfCities = [self getNumberOfCities];
-    
+    //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     /*
     CGRect scrollViewRect = CGRectMake(0, 64, XWIDTH, XHEIGHT-124);
@@ -77,10 +78,9 @@
     RealTimeView *view = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 64, XWIDTH, 500) withRealTimeWeather:weather];
     [self.view addSubview:view];
     */
-    
+    //请求.
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
-    //[self.requestEngine startRequest];
     [self.requestEngine startRequestWithCityName:@"宜昌"];
     
     
@@ -102,20 +102,22 @@
 }
 
 - (NSInteger)getNumberOfCities {
-    
-    
-    
+    NSArray *list = [[NSArray alloc]initWithContentsOfFile:[self cityListDataPath]];
+    if (list != nil) {
+        [self.cityListArray addObjectsFromArray:list];
+    }
     NSInteger num = [self.cityListArray count];
     return num;
 }
 
-- (NSString *)cityListDataFile {
-    
-    
-    return nil;
+- (NSString *)cityListDataPath {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];
+    return [path stringByAppendingPathComponent:@"citylist.plist"];
 }
 
 
+ 
 #pragma  mark  UIScrollViewDelegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -126,6 +128,8 @@
 #pragma mark  TabBarDelegate
 
 - (void)subButton_0_Action {
+
+     // [self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
     
 }
 
