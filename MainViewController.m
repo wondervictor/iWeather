@@ -13,6 +13,7 @@
 //  Model
 #import "OneNetWork.h"
 #import "WeatherParse.h"
+#import "WeatherRequest.h"
 //  View
 #import "RealTimeView.h"
 #import "RealTimeWeather.h"
@@ -20,7 +21,7 @@
 //  Controller
 #import "MainViewController.h"
 
-@interface MainViewController()<UIScrollViewDelegate,TabBarDelegate>
+@interface MainViewController()<UIScrollViewDelegate,TabBarDelegate,WeatherRequestDelegate>
 {
     
 }
@@ -34,7 +35,8 @@
 @property (nonatomic, strong) NSMutableArray *cityListArray;
 
 @property (nonatomic, strong) TabBar *tabBar;
-
+// request
+@property (nonatomic, strong) WeatherRequest *requestEngine;
 
 @end
 
@@ -67,7 +69,9 @@
     
     //NSLog(@"%@", [title sizeWithFont:HELVETICANEUEMEDIUM_FONT(12.0f)];);
     
-    
+    self.requestEngine = [[WeatherRequest alloc]initRequest];
+    self.requestEngine.delegate = self;
+    [self.requestEngine startRequest];
     
     CGFloat settingWidth = 150;
     if (XWIDTH <375) {
@@ -81,37 +85,11 @@
         [tb subButtonImage:@"about" withTag:3];
     } locationX:0 locationY:0];
     self.tabBar.delegate = self;
-    // self.tabBar.layer.borderColor = [UIColor blackColor].CGColor;
-    // self.tabBar.layer.borderWidth = 0.3f;
     [self.view addSubview:self.tabBar];
   
     
-    //  netWork
-    
-    NSDictionary *requestParams = @{@"cityname":@"宜昌",
-                                    @"dtype":@"json",
-                                    @"key":@"5e9055bef55f2e0ac8e3fdb4c0315629"};
-    WeatherParse *paser = [WeatherParse sharedManager];
-    __block RealTimeWeather *weather = [[RealTimeWeather alloc]init];
-    
-    NSString *urlString = @"http://op.juhe.cn/onebox/weather/query?";
-    
-    OneNetWork *oneNetWork = [OneNetWork sharedManager];
-    [oneNetWork asynchronousRequestWithURLString:urlString WithRequestMethod:@"POST" params:requestParams withCompletion:^(NSData *data, NSURLResponse *response) {
-      //  NSLog(@"%@",data);
-        NSDictionary *dict = [paser getWeatherData:data];
-        NSLog(@"%@",dict);
-        weather = [paser parseRealTimeWeather:dict];
-        NSLog(@"%@",weather.cityName);
-        
-        
-    } withError:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
-    
-    NSLog(@"%@",weather.cityName);
-   
 }
+
 
 
 
@@ -177,6 +155,20 @@
     }
 }
 
+
+#pragma mark  - WeatherRequestDelegate
+
+- (void)weatherRequestFinished:(NSDictionary *)data withError:(NSString *)error {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
+    if (error == nil) {
+        NSLog(@"%@",data);
+    }
+    else if (error!=nil) {
+        NSLog(@"%@",error);
+    }
+    
+}
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
