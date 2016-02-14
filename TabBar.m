@@ -260,40 +260,69 @@
 - (void)barButtonFirstPress:(BarButton *)sender {
     if (sender == [self.tabButtons objectAtIndex:0]) {
         [_delegate firstTouchAtIndex:0 button:sender];
+        [self buttonAtIndex:0 enableOtherButtons:NO];
     }
     else if (sender == [self.tabButtons objectAtIndex:1])
     {
         [_delegate firstTouchAtIndex:1 button:sender];
+        [self buttonAtIndex:1 enableOtherButtons:NO];
+
     }
     else if (sender == [self.tabButtons objectAtIndex:2])
     {
         [_delegate firstTouchAtIndex:2 button:sender];
+        [self buttonAtIndex:2 enableOtherButtons:NO];
+
     }
     else if (sender == [self.tabButtons objectAtIndex:3])
     {
         [_delegate firstTouchAtIndex:3 button:sender];
+        [self buttonAtIndex:3 enableOtherButtons:NO];
+
     }
 }
 
 - (void)barButtonSecondPress:(BarButton *)sender {
     if (sender == [self.tabButtons objectAtIndex:0]) {
         [_delegate secondTouchAtIndex:0 button:sender];
+        [self buttonAtIndex:0 enableOtherButtons:YES];
     }
     else if (sender == [self.tabButtons objectAtIndex:1])
     {
         [_delegate secondTouchAtIndex:1 button:sender];
+        [self buttonAtIndex:1 enableOtherButtons:YES];
+
     }
     else if (sender == [self.tabButtons objectAtIndex:2])
     {
         [_delegate secondTouchAtIndex:2 button:sender];
+        [self buttonAtIndex:2 enableOtherButtons:YES];
+
     }
     else if (sender == [self.tabButtons objectAtIndex:3])
     {
         [_delegate secondTouchAtIndex:3 button:sender];
+        [self buttonAtIndex:3 enableOtherButtons:YES];
+
     }
 }
 
-
+//  Tab Button only one enabled one time
+- (void)buttonAtIndex:(NSInteger)index enableOtherButtons:(BOOL)enabled {
+    if (enabled) {
+        for (BarButton *button in self.tabButtons) {
+            button.enabled = YES;
+        }
+    }
+    else if (!enabled) {
+        for (BarButton *button in self.tabButtons) {
+            button.enabled = NO;
+        }
+        BarButton *button = [self.tabButtons objectAtIndex:index];
+        button.enabled = YES;
+    }
+    
+}
 
 
 /*

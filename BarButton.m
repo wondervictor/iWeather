@@ -52,12 +52,6 @@
 }
     
 /*
-    self.titleLabel.textColor = [UIColor orangeColor];
-
-}
-
- */
-/*
 - (void)layoutSubviews {
 
         [super layoutSubviews];

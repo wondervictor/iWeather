@@ -15,11 +15,13 @@
 - (void)firstTouchAtIndex:(NSInteger)index button:(BarButton *)sender;
 - (void)secondTouchAtIndex:(NSInteger)index button:(BarButton *)sender;
 
-//- (void)centerButtonClick;
 - (void)subButton_0_Action;     // search
 - (void)subButton_1_Action;     // add
 - (void)subButton_2_Action;     // setting
 - (void)subButton_3_Action;     // about
+
+@optional
+- (void)centerButtonClick;
 
 @end
 

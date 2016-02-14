@@ -5,21 +5,21 @@
 //  Created by VicChan on 16/2/10.
 //  Copyright © 2016年 VicChan. All rights reserved.
 //
-
+//  宏
 #define XHEIGHT self.view.frame.size.height
 #define XWIDTH  self.view.frame.size.width
 #define DEFAULT_COLOR [UIColor colorWithRed:74/255.0 green:74/255.0 blue:74/255.0 alpha:1.0]
 
+//  Model
 #import "OneNetWork.h"
 #import "WeatherParse.h"
-
+//  View
 #import "RealTimeView.h"
 #import "RealTimeWeather.h"
 #import "TabBar.h"
-
-
-
+//  Controller
 #import "MainViewController.h"
+
 @interface MainViewController()<UIScrollViewDelegate,TabBarDelegate>
 {
     
@@ -84,7 +84,13 @@
     // self.tabBar.layer.borderColor = [UIColor blackColor].CGColor;
     // self.tabBar.layer.borderWidth = 0.3f;
     [self.view addSubview:self.tabBar];
-    NSDictionary *requestParams = @{@"cityname":@"宜昌",@"dtype":@"json",@"key":@"5e9055bef55f2e0ac8e3fdb4c0315629"};
+  
+    
+    //  netWork
+    
+    NSDictionary *requestParams = @{@"cityname":@"宜昌",
+                                    @"dtype":@"json",
+                                    @"key":@"5e9055bef55f2e0ac8e3fdb4c0315629"};
     WeatherParse *paser = [WeatherParse sharedManager];
     __block RealTimeWeather *weather = [[RealTimeWeather alloc]init];
     
@@ -132,6 +138,10 @@
 }
 
 - (void)subButton_3_Action {
+    
+}
+
+- (void)centerButtonClick {
     
 }
 

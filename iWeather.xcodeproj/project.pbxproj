@@ -28,6 +28,7 @@
 		2EB229711C6F0F5C003E64B3 /* BarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229701C6F0F5C003E64B3 /* BarButton.m */; };
 		2EB229741C6F12C1003E64B3 /* UIButton+UIImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229731C6F12C1003E64B3 /* UIButton+UIImage.m */; };
 		2EB229781C6F4B68003E64B3 /* OneNetWork.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229771C6F4B68003E64B3 /* OneNetWork.m */; };
+		2EB229C01C7022AC003E64B3 /* WeatherRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229BF1C7022AC003E64B3 /* WeatherRequest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,8 @@
 		2EB229731C6F12C1003E64B3 /* UIButton+UIImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+UIImage.m"; sourceTree = "<group>"; };
 		2EB229761C6F4B68003E64B3 /* OneNetWork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneNetWork.h; sourceTree = "<group>"; };
 		2EB229771C6F4B68003E64B3 /* OneNetWork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneNetWork.m; sourceTree = "<group>"; };
+		2EB229BE1C7022AC003E64B3 /* WeatherRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeatherRequest.h; path = iWeather/WeatherRequest.h; sourceTree = "<group>"; };
+		2EB229BF1C7022AC003E64B3 /* WeatherRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeatherRequest.m; path = iWeather/WeatherRequest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,14 +188,8 @@
 		2E0AB5CB1C6ABF1200D8CFC0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				2E0AB6101C6AE6F900D8CFC0 /* WeatherParse.h */,
-				2E0AB6111C6AE6F900D8CFC0 /* WeatherParse.m */,
-				2E0AB6131C6AE70F00D8CFC0 /* RealTimeWeather.h */,
-				2E0AB6141C6AE70F00D8CFC0 /* RealTimeWeather.m */,
-				2E0AB6161C6AE72300D8CFC0 /* WeekWeather.h */,
-				2E0AB6171C6AE72300D8CFC0 /* WeekWeather.m */,
-				2E0AB6191C6AE73400D8CFC0 /* LifeWeather.h */,
-				2E0AB61A1C6AE73400D8CFC0 /* LifeWeather.m */,
+				2EB229BD1C7020F8003E64B3 /* URLRequest */,
+				2EB229BC1C7020D2003E64B3 /* WeatherData */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -262,6 +259,30 @@
 				2EB229771C6F4B68003E64B3 /* OneNetWork.m */,
 			);
 			name = OneNetWork;
+			sourceTree = "<group>";
+		};
+		2EB229BC1C7020D2003E64B3 /* WeatherData */ = {
+			isa = PBXGroup;
+			children = (
+				2E0AB6101C6AE6F900D8CFC0 /* WeatherParse.h */,
+				2E0AB6111C6AE6F900D8CFC0 /* WeatherParse.m */,
+				2E0AB6131C6AE70F00D8CFC0 /* RealTimeWeather.h */,
+				2E0AB6141C6AE70F00D8CFC0 /* RealTimeWeather.m */,
+				2E0AB6161C6AE72300D8CFC0 /* WeekWeather.h */,
+				2E0AB6171C6AE72300D8CFC0 /* WeekWeather.m */,
+				2E0AB6191C6AE73400D8CFC0 /* LifeWeather.h */,
+				2E0AB61A1C6AE73400D8CFC0 /* LifeWeather.m */,
+			);
+			name = WeatherData;
+			sourceTree = "<group>";
+		};
+		2EB229BD1C7020F8003E64B3 /* URLRequest */ = {
+			isa = PBXGroup;
+			children = (
+				2EB229BE1C7022AC003E64B3 /* WeatherRequest.h */,
+				2EB229BF1C7022AC003E64B3 /* WeatherRequest.m */,
+			);
+			name = URLRequest;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -401,6 +422,7 @@
 			files = (
 				2EB229781C6F4B68003E64B3 /* OneNetWork.m in Sources */,
 				2EB229651C6B7456003E64B3 /* TabBar.m in Sources */,
+				2EB229C01C7022AC003E64B3 /* WeatherRequest.m in Sources */,
 				2E0AB6181C6AE72300D8CFC0 /* WeekWeather.m in Sources */,
 				2EB2296B1C6C7084003E64B3 /* subButton.m in Sources */,
 				2E0AB6121C6AE6F900D8CFC0 /* WeatherParse.m in Sources */,
