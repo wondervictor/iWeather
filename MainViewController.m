@@ -33,13 +33,14 @@
 @property (nonatomic, strong) UIPageControl *pageControl;
 
 @property (nonatomic) NSInteger numberOfCities;
-//城市
+//城市列表
 @property (nonatomic, strong) NSMutableArray *cityListArray;
 
 @property (nonatomic, strong) TabBar *tabBar;
 // request
 @property (nonatomic, strong) WeatherRequest *requestEngine;
-
+// 存放所有城市天气的可变数组
+@property (nonatomic, strong) NSMutableArray *cityWeatherDataList;
 
 
 //  CLLocation
@@ -73,6 +74,14 @@
     self.cityListArray = [[NSMutableArray alloc]init];
     self.numberOfCities = [self getNumberOfCities];
     
+    CGRect scrollViewRect = CGRectMake(0, 64, XWIDTH, XHEIGHT - 114);
+    self.weatherScrollView = [[UIScrollView alloc]initWithFrame:scrollViewRect];
+    self.weatherScrollView.delegate = self;
+    self.weatherScrollView.backgroundColor = [UIColor clearColor];
+    self.weatherScrollView.pagingEnabled = YES;
+    self.weatherScrollView.contentSize = CGSizeMake(XWIDTH * (_numberOfCities==0 ? 1:_numberOfCities), XHEIGHT -114);
+    self.weatherScrollView.showsVerticalScrollIndicator = NO;
+    [self.view addSubview:self.weatherScrollView];
     
     
     //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -89,17 +98,18 @@
     self.weatherScrollView.bounces = YES;
     [self.view addSubview:self.weatherScrollView];
     */
-    /*
+    
     RealTimeWeather *weather = [[RealTimeWeather alloc]init];
-    weather.weatherTemp = @"23";
+    weather.weatherTemp = @" 23°";
     weather.weatherCondition = @"晴";
     weather.img = @"3";
     weather.cityName = @"北京";
     
-    RealTimeView *view = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 64, XWIDTH, 500) withRealTimeWeather:weather];
+    RealTimeView *view = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 64, XWIDTH, 414.75) withRealTimeWeather:weather];
     [self.view addSubview:view];
-    */
+    
     //请求.
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loadCenterWeatherView:) name:@"WeatherRequestDidGetDataNotificaton" object:nil];
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
     [self.requestEngine startRequestWithCityName:@"宜昌"];
@@ -135,6 +145,13 @@
 }
 
 - (void)refreshData {
+    
+}
+
+
+- (void)loadCenterWeatherView:(NSNotification *)notification {
+    
+    
     
 }
 
@@ -223,9 +240,9 @@
 
 - (void)weatherRequestFinished:(NSDictionary *)data withError:(NSString *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-
     if (error == nil) {
-        NSLog(@"%@",data);
+        //NSLog(@"%@",data);
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"WeatherRequestDidGetDataNotificaton" object:data userInfo:nil];
     }
     else if (error!=nil) {
         NSLog(@"%@",error);

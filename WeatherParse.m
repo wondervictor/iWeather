@@ -44,13 +44,22 @@ static WeatherParse *sharedManager = nil;
     
     NSDictionary *weatherDict = [realWeatherDict valueForKey:@"weather"];
     real.weatherCondition = [weatherDict valueForKey:@"info"];
-    real.weatherTemp = [NSString stringWithFormat:@"%@°",[weatherDict valueForKey:@"temperature"]];
+    real.weatherTemp = [NSString stringWithFormat:@" %@°",[weatherDict valueForKey:@"temperature"]];
     real.humidty = [weatherDict valueForKey:@"humidity"];
     real.img = [weatherDict valueForKey:@"img"];
     
     
     return real;
 }
+
+- (NSMutableDictionary *)parseForConditionView:(NSDictionary *)weather {
+    NSMutableDictionary *conditionViewData = [[NSMutableDictionary alloc]init];
+    
+    
+    return conditionViewData;
+}
+
+
 
 // 多余
 /*
