@@ -18,7 +18,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
+    [NSThread sleepForTimeInterval:2.0f];
     return YES;
 }
 
