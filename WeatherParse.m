@@ -54,7 +54,29 @@ static WeatherParse *sharedManager = nil;
 
 - (NSMutableDictionary *)parseForConditionView:(NSDictionary *)weather {
     NSMutableDictionary *conditionViewData = [[NSMutableDictionary alloc]init];
+    NSDictionary *realWeatherDict = [weather valueForKey:@"realtime"];   //  实时天气的信息
+    NSDictionary *wind = [realWeatherDict valueForKey:@"wind"];          //  风
+    NSString *windSpeed = [NSString stringWithFormat:@"%@km/h",[wind valueForKey:@"windspeed"]];
+    [conditionViewData setObject:windSpeed forKey:@"windspeed"];
+    [conditionViewData setObject:[wind valueForKey:@"direct"] forKey:@"winddirection"];
+    NSDictionary *weatherDict = [realWeatherDict valueForKey:@"weather"]; //实时天气的内容
+    [conditionViewData setObject:[weatherDict valueForKey:@"humidity"] forKey:@"humidty"];
+    [conditionViewData setObject:[realWeatherDict valueForKey:@"moon"] forKey:@"lunardate"];
     
+    NSDictionary *dict = [weather valueForKey:@"life"];    //生活信息
+    NSDictionary *info = [dict valueForKey:@"info"];
+    NSString *uv = [[info valueForKey:@"ziwaixian"]objectAtIndex:0];
+    NSString *pollution = [[info valueForKey:@"wuran"]objectAtIndex:0];
+    [conditionViewData setObject:uv forKey:@"uvray"];
+    [conditionViewData setObject:pollution forKey:@"pollution"];
+    
+    NSArray *listWeek = [weather valueForKey:@"weather"];     // 一周天气
+    NSDictionary *item = [listWeek objectAtIndex:0];
+    NSDictionary *aDay = [item valueForKey:@"info"];
+    NSString *sunrise = [[aDay valueForKey:@"day"]objectAtIndex:5];
+    NSString *sunset = [[aDay valueForKey:@"night"]objectAtIndex:5];
+    [conditionViewData setObject:sunset forKey:@"sunset"];
+    [conditionViewData setObject:sunrise forKey:@"sunrise"];
     
     return conditionViewData;
 }

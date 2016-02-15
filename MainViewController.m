@@ -17,6 +17,7 @@
 #import "RealTimeView.h"
 #import "RealTimeWeather.h"
 #import "TabBar.h"
+#import "ConditionView.h"
 //  Controller
 #import "MainViewController.h"
 //  Frameworks
@@ -73,7 +74,7 @@
     self.view.backgroundColor = DEFAULT_COLOR;
     self.cityListArray = [[NSMutableArray alloc]init];
     self.numberOfCities = [self getNumberOfCities];
-    
+    /*
     CGRect scrollViewRect = CGRectMake(0, 64, XWIDTH, XHEIGHT - 114);
     self.weatherScrollView = [[UIScrollView alloc]initWithFrame:scrollViewRect];
     self.weatherScrollView.delegate = self;
@@ -82,7 +83,7 @@
     self.weatherScrollView.contentSize = CGSizeMake(XWIDTH * (_numberOfCities==0 ? 1:_numberOfCities), XHEIGHT -114);
     self.weatherScrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:self.weatherScrollView];
-    
+    */
     
     //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
@@ -98,7 +99,7 @@
     self.weatherScrollView.bounces = YES;
     [self.view addSubview:self.weatherScrollView];
     */
-    
+    /*
     RealTimeWeather *weather = [[RealTimeWeather alloc]init];
     weather.weatherTemp = @" 23°";
     weather.weatherCondition = @"晴";
@@ -107,7 +108,7 @@
     
     RealTimeView *view = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 64, XWIDTH, 414.75) withRealTimeWeather:weather];
     [self.view addSubview:view];
-    
+    */
     //请求.
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loadCenterWeatherView:) name:@"WeatherRequestDidGetDataNotificaton" object:nil];
     self.requestEngine = [[WeatherRequest alloc]initRequest];
@@ -150,8 +151,24 @@
 
 
 - (void)loadCenterWeatherView:(NSNotification *)notification {
+   
+    
+    dispatch_queue_t currentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(currentQueue, ^{
+    RealTimeWeather *realTime = [[RealTimeWeather alloc]init];
+    WeatherParse *parser = [WeatherParse sharedManager];
+    NSDictionary *weatherData = notification.object;
+    realTime = [parser parseRealTimeWeather:weatherData];
+    NSDictionary *dictForCondition = [parser parseForConditionView:weatherData];
+    
+    RealTimeView *realTimeView = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 64, XWIDTH, 414.75) withRealTimeWeather:realTime];
+    [self.view addSubview:realTimeView];
     
     
+    ConditionView *conditionView = [[ConditionView alloc]initWithFrame:CGRectMake(0, 64+414.75, XWIDTH, 138.35) withData:dictForCondition];
+    [self.view addSubview:conditionView];
+    
+    });
     
 }
 

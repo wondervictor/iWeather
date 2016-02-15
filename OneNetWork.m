@@ -30,7 +30,7 @@ static OneNetWork *sharedManager = nil;
     if (!_session) {
         _session = [NSURLSession sharedSession];
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        configuration.timeoutIntervalForRequest = 10;   //超时请求
+        configuration.timeoutIntervalForRequest = 10;//超时请求
         configuration.allowsCellularAccess = YES;
         _session = [NSURLSession sessionWithConfiguration:configuration];
     }
@@ -71,7 +71,7 @@ static OneNetWork *sharedManager = nil;
 - (void)asynchronousRequestWithURLString:(NSString *)URLString WithRequestMethod:(NSString *)method params:(NSDictionary *)params withCompletion:(Completion)completion withError:(ErrorBlock)finishError {
     NSURL *url = [NSURL URLWithString:URLString];
     dispatch_queue_t currentQueue = dispatch_get_main_queue();
-    dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+    //dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(currentQueue, ^{
         if ([method caseInsensitiveCompare:@"GET"]==NSOrderedSame) {
             NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
@@ -97,7 +97,7 @@ static OneNetWork *sharedManager = nil;
         }
 
     });
-    });
+    
     
 }
 
