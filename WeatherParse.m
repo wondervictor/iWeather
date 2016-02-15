@@ -56,7 +56,7 @@ static WeatherParse *sharedManager = nil;
     NSMutableDictionary *conditionViewData = [[NSMutableDictionary alloc]init];
     NSDictionary *realWeatherDict = [weather valueForKey:@"realtime"];   //  实时天气的信息
     NSDictionary *wind = [realWeatherDict valueForKey:@"wind"];          //  风
-    NSString *windSpeed = [NSString stringWithFormat:@"%@km/h",[wind valueForKey:@"windspeed"]];
+    NSString *windSpeed = [NSString stringWithFormat:@"%@",[wind valueForKey:@"windspeed"]];
     [conditionViewData setObject:windSpeed forKey:@"windspeed"];
     [conditionViewData setObject:[wind valueForKey:@"direct"] forKey:@"winddirection"];
     NSDictionary *weatherDict = [realWeatherDict valueForKey:@"weather"]; //实时天气的内容

@@ -70,8 +70,8 @@ static OneNetWork *sharedManager = nil;
 
 - (void)asynchronousRequestWithURLString:(NSString *)URLString WithRequestMethod:(NSString *)method params:(NSDictionary *)params withCompletion:(Completion)completion withError:(ErrorBlock)finishError {
     NSURL *url = [NSURL URLWithString:URLString];
-    dispatch_queue_t currentQueue = dispatch_get_main_queue();
-    //dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    //dispatch_queue_t currentQueue = dispatch_get_main_queue();
+    dispatch_queue_t currentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(currentQueue, ^{
         if ([method caseInsensitiveCompare:@"GET"]==NSOrderedSame) {
             NSURLSessionDataTask *task = [self.session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){

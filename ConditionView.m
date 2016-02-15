@@ -58,7 +58,7 @@
             _proportion = 155.5/91.5;
         }
         CGFloat labelHeight = 20 * _proportion;
-        CGFloat spaceDistance = 5 * _proportion;
+        CGFloat spaceDistance = 4 * _proportion;
         [self configureViewWithLabelHeight:labelHeight spaceDistance:spaceDistance];
         [self configureInfoLabelWithDict:dict withLabelHeight:labelHeight spaceDistance:spaceDistance];
         
@@ -110,7 +110,7 @@
     label.textAlignment = NSTextAlignmentLeft;
     label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1.0];
-    label.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:labelHeight - 5.0];
+    label.font = [UIFont fontWithName:@"HelveticaNeue" size:10+labelHeight/9.0];
     [self addSubview:label];
 }
 
@@ -159,7 +159,7 @@
     label.textAlignment = NSTextAlignmentRight;
     label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1.0];
-    label.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:labelHeight - 5.0];
+    label.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:10+labelHeight/10];
     [self addSubview:label];
 }
 

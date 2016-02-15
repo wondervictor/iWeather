@@ -74,16 +74,17 @@
     self.view.backgroundColor = DEFAULT_COLOR;
     self.cityListArray = [[NSMutableArray alloc]init];
     self.numberOfCities = [self getNumberOfCities];
-    /*
+    
     CGRect scrollViewRect = CGRectMake(0, 64, XWIDTH, XHEIGHT - 114);
     self.weatherScrollView = [[UIScrollView alloc]initWithFrame:scrollViewRect];
     self.weatherScrollView.delegate = self;
     self.weatherScrollView.backgroundColor = [UIColor clearColor];
     self.weatherScrollView.pagingEnabled = YES;
-    self.weatherScrollView.contentSize = CGSizeMake(XWIDTH * (_numberOfCities==0 ? 1:_numberOfCities), XHEIGHT -114);
+    self.weatherScrollView.contentSize = CGSizeMake(XWIDTH * 3, XHEIGHT-114);
+    //CGSizeMake(XWIDTH * (_numberOfCities==0 ? 1:_numberOfCities), XHEIGHT -114);
     self.weatherScrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:self.weatherScrollView];
-    */
+    
     
     //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
@@ -110,7 +111,7 @@
     [self.view addSubview:view];
     */
     //请求.
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loadCenterWeatherView:) name:@"WeatherRequestDidGetDataNotificaton" object:nil];
+
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
     [self.requestEngine startRequestWithCityName:@"宜昌"];
@@ -150,26 +151,22 @@
 }
 
 
-- (void)loadCenterWeatherView:(NSNotification *)notification {
-   
-    
-    dispatch_queue_t currentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(currentQueue, ^{
+- (void)loadCenterWeatherView:(NSDictionary *)weatherData {
+   //   58 页崩溃数据报告
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
     RealTimeWeather *realTime = [[RealTimeWeather alloc]init];
     WeatherParse *parser = [WeatherParse sharedManager];
-    NSDictionary *weatherData = notification.object;
     realTime = [parser parseRealTimeWeather:weatherData];
     NSDictionary *dictForCondition = [parser parseForConditionView:weatherData];
     
-    RealTimeView *realTimeView = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 64, XWIDTH, 414.75) withRealTimeWeather:realTime];
-    [self.view addSubview:realTimeView];
-    
-    
-    ConditionView *conditionView = [[ConditionView alloc]initWithFrame:CGRectMake(0, 64+414.75, XWIDTH, 138.35) withData:dictForCondition];
-    [self.view addSubview:conditionView];
+    RealTimeView *realTimeView = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 0, XWIDTH, 3*(XHEIGHT-114)/4) withRealTimeWeather:realTime];
+    [self.weatherScrollView addSubview:realTimeView];
+        
+    ConditionView *conditionView = [[ConditionView alloc]initWithFrame:CGRectMake(0, 3*(XHEIGHT-114)/4, XWIDTH, (XHEIGHT - 114)/4) withData:dictForCondition];
+    [self.weatherScrollView addSubview:conditionView];
     
     });
-    
 }
 
 - (NSInteger)getNumberOfCities {
@@ -258,8 +255,7 @@
 - (void)weatherRequestFinished:(NSDictionary *)data withError:(NSString *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     if (error == nil) {
-        //NSLog(@"%@",data);
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"WeatherRequestDidGetDataNotificaton" object:data userInfo:nil];
+        [self loadCenterWeatherView:data];
     }
     else if (error!=nil) {
         NSLog(@"%@",error);
