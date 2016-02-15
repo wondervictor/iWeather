@@ -20,11 +20,12 @@
 #import "ConditionView.h"
 //  Controller
 #import "MainViewController.h"
+#import "SearchViewController.h"
 //  Frameworks
 #import <CoreLocation/CoreLocation.h>
 #import <CoreLocation/CLLocationManagerDelegate.h>
 
-@interface MainViewController()<UIScrollViewDelegate,TabBarDelegate,WeatherRequestDelegate,CLLocationManagerDelegate>
+@interface MainViewController()<UIScrollViewDelegate,TabBarDelegate,WeatherRequestDelegate,CLLocationManagerDelegate,subButtonDelegate>
 {
     
 }
@@ -42,11 +43,17 @@
 @property (nonatomic, strong) WeatherRequest *requestEngine;
 // 存放所有城市天气的可变数组
 @property (nonatomic, strong) NSMutableArray *cityWeatherDataList;
+//可变数组存放realTimeView s
+@property (nonatomic, strong) NSMutableArray *realTimeViews;
 
 
 //  CLLocation
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSString *locationCityName;
+
+// Controllers
+
+@property (nonatomic, strong) SearchViewController *searchViewController;
 
 
 @end
@@ -80,41 +87,17 @@
     self.weatherScrollView.delegate = self;
     self.weatherScrollView.backgroundColor = [UIColor clearColor];
     self.weatherScrollView.pagingEnabled = YES;
-    self.weatherScrollView.contentSize = CGSizeMake(XWIDTH * 3, XHEIGHT-114);
-    //CGSizeMake(XWIDTH * (_numberOfCities==0 ? 1:_numberOfCities), XHEIGHT -114);
+    self.weatherScrollView.contentSize = CGSizeMake(XWIDTH * (_numberOfCities==0 ? 1:_numberOfCities), XHEIGHT -114);
     self.weatherScrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:self.weatherScrollView];
     
-    
-    //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    /*
-    CGRect scrollViewRect = CGRectMake(0, 64, XWIDTH, XHEIGHT-124);
-    self.weatherScrollView = [[UIScrollView alloc]initWithFrame:scrollViewRect];
-    self.weatherScrollView.delegate = self;
-    self.weatherScrollView.contentSize = CGSizeMake(self.numberOfCities * XWIDTH, XHEIGHT-124);
-    self.weatherScrollView.backgroundColor = [UIColor clearColor];
-    self.weatherScrollView.pagingEnabled = YES;
-    self.weatherScrollView.showsHorizontalScrollIndicator = NO;
-    self.weatherScrollView.showsVerticalScrollIndicator = NO;
-    self.weatherScrollView.bounces = YES;
-    [self.view addSubview:self.weatherScrollView];
-    */
-    /*
-    RealTimeWeather *weather = [[RealTimeWeather alloc]init];
-    weather.weatherTemp = @" 23°";
-    weather.weatherCondition = @"晴";
-    weather.img = @"3";
-    weather.cityName = @"北京";
-    
-    RealTimeView *view = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 64, XWIDTH, 414.75) withRealTimeWeather:weather];
-    [self.view addSubview:view];
-    */
     //请求.
 
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
     [self.requestEngine startRequestWithCityName:@"宜昌"];
+    
+    
     // Core Location
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.delegate = self;
@@ -138,7 +121,19 @@
     } locationX:0 locationY:0];
     self.tabBar.delegate = self;
     [self.view addSubview:self.tabBar];
-  
+    
+    
+    // refreshButton
+    subButton *refreshBtn = [[subButton alloc]initWithFrame:CGRectMake(XWIDTH - 60,22,40 , 40)];
+    refreshBtn.delegate = self;
+    refreshBtn.layer.cornerRadius = 20.0f;
+    refreshBtn.layer.masksToBounds = YES;
+    [refreshBtn setImage:[UIImage imageNamed:@"refresh"] forState:UIControlStateNormal];
+    [self.view addSubview:refreshBtn];
+    
+    self.searchViewController = [[SearchViewController alloc]init];
+    
+    
     
 }
 
@@ -198,6 +193,11 @@
 - (void)subButton_0_Action {
 
      // [self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
+  //  self.searchViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [self presentViewController:self.searchViewController animated:YES completion:^{
+        NSLog(@"search view controller");
+    }];
+    
     
 }
 
@@ -258,10 +258,15 @@
         [self loadCenterWeatherView:data];
     }
     else if (error!=nil) {
-        NSLog(@"%@",error);
+        [self requestError:error];
     }
     
 }
+//  请求错误.
+- (void)requestError:(NSString *)error {
+    
+}
+
 
 - (void)locate {
     [self.locationManager startUpdatingLocation];
@@ -318,6 +323,12 @@
         NSLog(@"NotDetermined");
     }
     
+}
+
+// Refresh
+#pragma  mark - subButtonDelegate 
+- (void)subButtonPress:(subButton *)button {
+    //[self.requestEngine startRequestWithCityName:@"宜都"];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{

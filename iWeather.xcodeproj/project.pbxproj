@@ -34,6 +34,7 @@
 		2EB229F81C707BCB003E64B3 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229F71C707BCB003E64B3 /* TodayViewController.m */; };
 		2EB229FB1C707BCB003E64B3 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2EB229F91C707BCB003E64B3 /* MainInterface.storyboard */; };
 		2EB229FF1C707BCB003E64B3 /* Today‘s Weather.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2EB229F31C707BCB003E64B3 /* Today‘s Weather.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2EB22A461C71D672003E64B3 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB22A451C71D672003E64B3 /* SearchViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +125,8 @@
 		2EB229F71C707BCB003E64B3 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
 		2EB229FA1C707BCB003E64B3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		2EB229FC1C707BCB003E64B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2EB22A441C71D672003E64B3 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		2EB22A451C71D672003E64B3 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -241,6 +244,7 @@
 		2E0AB5CC1C6ABF1C00D8CFC0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2EB22A491C71E047003E64B3 /* SearchViews */,
 				2EB2296E1C6E1F32003E64B3 /* Views */,
 				2EB2296D1C6E1F18003E64B3 /* TabBarView */,
 			);
@@ -253,6 +257,8 @@
 				2EB2290E1C6B0BDB003E64B3 /* clear_day.png */,
 				2E0AB60D1C6AE38B00D8CFC0 /* MainViewController.h */,
 				2E0AB60E1C6AE38B00D8CFC0 /* MainViewController.m */,
+				2EB22A441C71D672003E64B3 /* SearchViewController.h */,
+				2EB22A451C71D672003E64B3 /* SearchViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -341,6 +347,13 @@
 				2EB229FC1C707BCB003E64B3 /* Info.plist */,
 			);
 			path = "Today‘s Weather";
+			sourceTree = "<group>";
+		};
+		2EB22A491C71E047003E64B3 /* SearchViews */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = SearchViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -521,6 +534,7 @@
 				2EB229C01C7022AC003E64B3 /* WeatherRequest.m in Sources */,
 				2E0AB6181C6AE72300D8CFC0 /* WeekWeather.m in Sources */,
 				2EB2296B1C6C7084003E64B3 /* subButton.m in Sources */,
+				2EB22A461C71D672003E64B3 /* SearchViewController.m in Sources */,
 				2E0AB6121C6AE6F900D8CFC0 /* WeatherParse.m in Sources */,
 				2E0AB59D1C6A4BE700D8CFC0 /* AppDelegate.m in Sources */,
 				2E0AB60F1C6AE38B00D8CFC0 /* MainViewController.m in Sources */,

@@ -30,7 +30,7 @@ static OneNetWork *sharedManager = nil;
     if (!_session) {
         _session = [NSURLSession sharedSession];
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        configuration.timeoutIntervalForRequest = 10;//超时请求
+        configuration.timeoutIntervalForRequest = 10;    //  超时请求
         configuration.allowsCellularAccess = YES;
         _session = [NSURLSession sessionWithConfiguration:configuration];
     }

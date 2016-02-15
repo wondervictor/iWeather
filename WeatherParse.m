@@ -81,8 +81,6 @@ static WeatherParse *sharedManager = nil;
     return conditionViewData;
 }
 
-
-
 // 多余
 /*
 - (WeekWeather *)parseWeekWeather:(NSDictionary *)weather{
