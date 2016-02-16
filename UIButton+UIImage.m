@@ -24,6 +24,6 @@
     [self setTitle:title forState:stateType];
    
     
-    }
+}
 
 @end

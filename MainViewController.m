@@ -60,7 +60,6 @@
 
 /**
    *  plist 存储城市数据.
-   *  Today's Weather Extension;
    *  缓存.
  */
 
@@ -95,7 +94,7 @@
 
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
-    [self.requestEngine startRequestWithCityName:@"宜昌"];
+    [self.requestEngine startRequestWithCityName:@"宜都"];
     
     
     // Core Location
@@ -124,9 +123,9 @@
     
     
     // refreshButton
-    subButton *refreshBtn = [[subButton alloc]initWithFrame:CGRectMake(XWIDTH - 60,22,40 , 40)];
+    subButton *refreshBtn = [[subButton alloc]initWithFrame:CGRectMake(XWIDTH - 50,22,30 , 30)];
     refreshBtn.delegate = self;
-    refreshBtn.layer.cornerRadius = 20.0f;
+    refreshBtn.layer.cornerRadius = 15.0f;
     refreshBtn.layer.masksToBounds = YES;
     [refreshBtn setImage:[UIImage imageNamed:@"refresh"] forState:UIControlStateNormal];
     [self.view addSubview:refreshBtn];
