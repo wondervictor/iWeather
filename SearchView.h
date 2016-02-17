@@ -8,8 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SearchViewDelegate <NSObject>
+
+- (void)addNewCity:(NSString *)cityName;
+
+@end
+
 @interface SearchView : UIView
 
+@property (nonatomic, weak) id<SearchViewDelegate> delegate;
 
 @property (nonatomic, strong) UITableView *tableView;
 

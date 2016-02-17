@@ -43,7 +43,7 @@
     self.view.backgroundColor = DEFAULT_COLOR;
     self.swipeGestureRecognizer  = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
     self.swipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
-    [self.view addGestureRecognizer:self.swipeGestureRecognizer];     //   shut gesture
+  //  [self.view addGestureRecognizer:self.swipeGestureRecognizer];     //   shut gesture
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
     
@@ -69,15 +69,7 @@
     
     [self.view addSubview:self.searchBar];
     
-    self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 120, -XWIDTH, XHEIGHT-200)];
-    
-    self.scrollView.backgroundColor = [UIColor clearColor];
-    self.scrollView.delegate = self;
-#warning height
-    self.scrollView.contentSize = CGSizeMake(XWIDTH, 0);
-    self.scrollView.pagingEnabled = YES;
-    self.scrollView.showsVerticalScrollIndicator = NO;
-    [self.view addSubview:self.scrollView];
+
     
     UIButton *cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake((XWIDTH-60)/2.0,XHEIGHT-60,60 , 60)];
     cancelBtn.backgroundColor = [UIColor cyanColor];
@@ -130,8 +122,43 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     if (!error) {
        
+        [self loadResultView:data];
+    }
+    else if ([error isEqualToString:@"1"])
+    {
+        NSLog(@"no data");
+        dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"无法搜索到城市" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            self.searchBar.text = @"";
+        }];
+        [alert addAction:cancelAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        });
+    }
+    else if ([error isEqualToString:@"2"])
+    {
+       //  网络故障
+    }
+}
+
+
+- (void)loadResultView:(NSDictionary *)data {
+    // UI  搭建
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, XWIDTH, XHEIGHT)];
+        
+        self.scrollView.backgroundColor = DEFAULT_COLOR;
+        self.scrollView.delegate = self;
+        self.scrollView.contentSize = CGSizeMake(XWIDTH, 700);
+        self.scrollView.pagingEnabled = YES;
+        self.scrollView.showsVerticalScrollIndicator = NO;
+        [self.view addSubview:self.scrollView];
+        
         WeatherParse *paser = [WeatherParse sharedManager];
         RealTimeWeather *realTimeWeather = [paser parseRealTimeWeather:data];
+       // NSLog(@"%@",realTimeWeather.cityName);
         LifeWeather *lifeWeather = [paser parseLifeWeather:data];
         NSArray *listWeather = [paser getWeekWeatherArray:data];
         NSDictionary *pm25 = [paser parseForPM25:data];
@@ -140,29 +167,13 @@
         [dict setObject:lifeWeather forKey:@"life"];
         [dict setObject:listWeather forKey:@"week"];
         [dict setObject:pm25 forKey:@"pm25"];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-        // UI  搭建
-        
-        
-        
-        });
-    }
-    else if ([error isEqualToString:@"1"])
-    {
-        NSLog(@"no data");
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"无法搜索到城市" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            self.searchBar.text = @"";
-        }];
-        [alert addAction:cancelAction];
-        [self presentViewController:alert animated:YES completion:nil];
-    }
-    else if ([error isEqualToString:@"2"])
-    {
-       //  网络故障
-    }
+        SearchView *view = [[SearchView alloc]initWithFrame:CGRectMake(0, 0,XWIDTH , 700) withData:dict];
+        [self.scrollView addSubview:view];
+    });
+    
+
 }
+
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
