@@ -22,5 +22,7 @@
 - (LifeWeather *)parseLifeWeather:(NSDictionary *)weather;
 - (NSMutableArray *)getWeekWeatherArray:(NSDictionary *)weather;
 - (NSMutableDictionary *)parseForConditionView:(NSDictionary *)weather;
+- (NSDictionary *)parseForPM25:(NSDictionary*)weather;
+
 
 @end

@@ -120,4 +120,12 @@ static WeatherParse *sharedManager = nil;
     return life;
 }
 
+- (NSDictionary *)parseForPM25:(NSDictionary *)weather {
+    NSDictionary *pm25 = [NSMutableDictionary new];
+    NSDictionary *pmData = [weather valueForKey:@"pm25"];
+    pm25 = [pmData valueForKey:@"pm25"];
+    return pm25;
+}
+
+
 @end

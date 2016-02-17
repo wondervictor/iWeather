@@ -27,9 +27,16 @@
     [oneNetWork asynchronousRequestWithURLString:self.requestUrl WithRequestMethod:@"POST" params:requestParams withCompletion:^(NSData *data, NSURLResponse *response) {
         WeatherParse *paser = [WeatherParse sharedManager];
         NSDictionary *dict = [paser getWeatherData:data];
-        [_delegate weatherRequestFinished:dict withError:nil];
+        
+        if ([dict isEqual:[NSNull null]]) {
+            [_delegate weatherRequestFinished:nil withError:@"1"];
+        }
+        else{
+            [_delegate weatherRequestFinished:dict withError:nil];
+        }
+        
     } withError:^(NSError *error) {
-        [_delegate weatherRequestFinished:nil withError:@"网络连接失败"];
+        [_delegate weatherRequestFinished:nil withError:@"2"];
     }];
 }
 
