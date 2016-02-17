@@ -13,41 +13,23 @@
 - (id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        _touched = NO;
     }
     return self;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    if (_touched == NO) {
-        if ([_delegate respondsToSelector:@selector(barButtonFirstPress:)]) {
-            [_delegate barButtonFirstPress:self];
-        }
-    }
-    else if (_touched == YES) {
-        if ([_delegate respondsToSelector:@selector(barButtonSecondPress:)]) {
-            [_delegate barButtonSecondPress:self];
-        }
-    }
 
+    [_delegate barButtonFirstPress:self];
     self.highlighted = YES;
 }
 
-- (BOOL)isTouched {
-    return _touched;
-}
+
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    if (_touched) {
-        _touched = NO;
-        self.highlighted = NO;
-    }
-    else if (_touched == NO) {
-        _touched = YES;
-         self.titleLabel.textColor = [UIColor orangeColor];
-    }
+
+    self.highlighted = NO;
     
 }
     

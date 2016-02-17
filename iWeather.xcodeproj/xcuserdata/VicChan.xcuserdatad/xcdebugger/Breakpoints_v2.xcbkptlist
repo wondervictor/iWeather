@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BarButton.m"
-            timestampString = "477110303.045203"
+            timestampString = "477412850.825975"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "@implementation BarButton"
             landmarkType = "3">
          </BreakpointContent>

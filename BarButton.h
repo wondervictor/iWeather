@@ -13,7 +13,6 @@
 @protocol BarButtonDelegate <NSObject>
 
 - (void)barButtonFirstPress:(BarButton *)sender;
-- (void)barButtonSecondPress:(BarButton *)sender;
 
 @end
 

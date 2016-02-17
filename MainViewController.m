@@ -24,11 +24,12 @@
 #import "AddViewController.h"
 #import "AboutViewController.h"
 #import "SettingViewController.h"
+#import "ARSPopover.h"
 //  Frameworks
 #import <CoreLocation/CoreLocation.h>
 #import <CoreLocation/CLLocationManagerDelegate.h>
 
-@interface MainViewController()<UIScrollViewDelegate,TabBarDelegate,WeatherRequestDelegate,CLLocationManagerDelegate,subButtonDelegate>
+@interface MainViewController()<UIScrollViewDelegate,TabBarDelegate,WeatherRequestDelegate,CLLocationManagerDelegate,subButtonDelegate,ARSPopoverDelegate>
 {
     
 }
@@ -221,37 +222,59 @@
 - (void)centerButtonClick {
     
 }
+//  TabBar Button_1_WeekTemp
+- (void)barButton_0_Touched:(BarButton *)sender {
+    ARSPopover *popoverController = [ARSPopover new];
+        popoverController.sourceView = sender;
+    popoverController.sourceRect =CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
+    popoverController.contentSize = CGSizeMake(XWIDTH, 200);
+    popoverController.arrowDirection = UIPopoverArrowDirectionDown;
+    [self presentViewController:popoverController animated:YES completion:^{
+        [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
+ 
+        }];
+    }];
 
-//  Tab Bar Button Press Event
-- (void)firstTouchAtIndex:(NSInteger)index button:(BarButton *)sender {
-    if (index == 0) {
-        NSLog(@"1 first");
-    }
-    else if (index == 1) {
-        NSLog(@"2 first");
-    }
-    else if (index == 2) {
-        NSLog(@"3 first");
-    }
-    else if (index == 3) {
-        NSLog(@"4 first");
-    }
-    
 }
+//  TabBar Button_2_PM2.5
+- (void)barButton_1_Touched:(BarButton *)sender {
+    ARSPopover *popoverController = [ARSPopover new];
+    popoverController.sourceView = sender;
+    popoverController.sourceRect = CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
+    popoverController.contentSize = CGSizeMake(XWIDTH, 200);
+    popoverController.arrowDirection = UIPopoverArrowDirectionDown;
+    [self presentViewController:popoverController animated:YES completion:^{
+        [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
+  
+        }];
+    }];
 
-- (void)secondTouchAtIndex:(NSInteger)index button:(BarButton *)sender {
-    if (index == 0) {
-        NSLog(@"1 second");
-    }
-    else if (index == 1) {
-        NSLog(@"2 second");
-    }
-    else if (index == 2) {
-        NSLog(@"3 second");
-    }
-    else if (index == 3) {
-        NSLog(@"4 second");
-    }
+}
+//  TabBar Button_3_Location
+- (void)barButton_2_Touched:(BarButton *)sender {
+    ARSPopover *popoverController = [ARSPopover new];
+    popoverController.sourceView = sender;
+    popoverController.sourceRect = CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
+    popoverController.contentSize = CGSizeMake(XWIDTH, 200);
+    popoverController.arrowDirection = UIPopoverArrowDirectionDown;
+    [self presentViewController:popoverController animated:YES completion:^{
+        [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
+            
+        }];
+    }];
+}
+//  TabBar Button_4_Info (life)
+- (void)barButton_3_Touched:(BarButton *)sender {
+    ARSPopover *popoverController = [ARSPopover new];
+    popoverController.sourceView = sender;
+    popoverController.sourceRect = CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
+    popoverController.contentSize = CGSizeMake(XWIDTH, 200);
+    popoverController.arrowDirection = UIPopoverArrowDirectionDown;
+    [self presentViewController:popoverController animated:YES completion:^{
+        [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
+            
+        }];
+    }];
 }
 
 
@@ -334,6 +357,21 @@
 #pragma  mark - subButtonDelegate 
 - (void)subButtonPress:(subButton *)button {
     //[self.requestEngine startRequestWithCityName:@"宜都"];
+}
+
+#pragma mark <ARSPopoverDelegate>
+
+- (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing *)view {
+    // delegate for you to use.
+}
+
+- (void)popoverPresentationControllerDidDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+    // delegate for you to use.
+}
+
+- (BOOL)popoverPresentationControllerShouldDismissPopover:(UIPopoverPresentationController *)popoverPresentationController {
+    // delegate for you to use.
+    return YES;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{

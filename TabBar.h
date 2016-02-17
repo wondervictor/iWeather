@@ -12,8 +12,11 @@
 #import <UIKit/UIKit.h>
 
 @protocol TabBarDelegate <NSObject>
-- (void)firstTouchAtIndex:(NSInteger)index button:(BarButton *)sender;
-- (void)secondTouchAtIndex:(NSInteger)index button:(BarButton *)sender;
+- (void)barButton_0_Touched:(BarButton *)sender;
+- (void)barButton_1_Touched:(BarButton *)sender;
+- (void)barButton_2_Touched:(BarButton *)sender;
+- (void)barButton_3_Touched:(BarButton *)sender;
+
 
 - (void)subButton_0_Action;     // search
 - (void)subButton_1_Action;     // add

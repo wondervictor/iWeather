@@ -5,10 +5,12 @@
 //  Created by VicChan on 16/2/10.
 //  Copyright © 2016年 VicChan. All rights reserved.
 //
-
+#import <CoreLocation/CoreLocation.h>
 #import "AppDelegate.h"
 
-@interface AppDelegate ()
+@interface AppDelegate ()<CLLocationManagerDelegate>
+
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end
 
@@ -19,6 +21,18 @@
     // Override point for customization after application launch.
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [NSThread sleepForTimeInterval:2.0f];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+       
+        
+        
+        
+        
+        
+    });
+    
+    
+    
+    
     return YES;
 }
 

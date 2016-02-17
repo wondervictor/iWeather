@@ -28,6 +28,7 @@
 		2E216A491C748C450034AE55 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E216A481C748C450034AE55 /* AboutViewController.m */; };
 		2E216A4B1C749B840034AE55 /* About.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2E216A4A1C749B840034AE55 /* About.jpg */; };
 		2E216A4E1C74A53D0034AE55 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E216A4D1C74A53D0034AE55 /* SettingViewController.m */; };
+		2E216A521C74AD170034AE55 /* ARSPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E216A501C74AD170034AE55 /* ARSPopover.m */; };
 		2EB229601C6B2E46003E64B3 /* RealTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB2295F1C6B2E46003E64B3 /* RealTimeView.m */; };
 		2EB229621C6B39D8003E64B3 /* ImageList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EB229611C6B39D8003E64B3 /* ImageList.plist */; };
 		2EB229651C6B7456003E64B3 /* TabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229641C6B7456003E64B3 /* TabBar.m */; };
@@ -109,6 +110,8 @@
 		2E216A4A1C749B840034AE55 /* About.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = About.jpg; sourceTree = "<group>"; };
 		2E216A4C1C74A53D0034AE55 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		2E216A4D1C74A53D0034AE55 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
+		2E216A501C74AD170034AE55 /* ARSPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARSPopover.m; sourceTree = "<group>"; };
+		2E216A511C74AD170034AE55 /* ARSPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARSPopover.h; sourceTree = "<group>"; };
 		2EB2295E1C6B2E46003E64B3 /* RealTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RealTimeView.h; sourceTree = "<group>"; };
 		2EB2295F1C6B2E46003E64B3 /* RealTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RealTimeView.m; sourceTree = "<group>"; };
 		2EB229611C6B39D8003E64B3 /* ImageList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ImageList.plist; sourceTree = "<group>"; };
@@ -160,6 +163,7 @@
 		2E0AB58C1C6A4BE700D8CFC0 = {
 			isa = PBXGroup;
 			children = (
+				2E216A4F1C74AD030034AE55 /* ARSPopover */,
 				2EB229751C6F4B28003E64B3 /* OneNetWork */,
 				2EB2296C1C6CF272003E64B3 /* Resources */,
 				2E0AB61C1C6AE73F00D8CFC0 /* Frameworks */,
@@ -267,6 +271,15 @@
 				2EB229CA1C707A4C003E64B3 /* NotificationCenter.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2E216A4F1C74AD030034AE55 /* ARSPopover */ = {
+			isa = PBXGroup;
+			children = (
+				2E216A511C74AD170034AE55 /* ARSPopover.h */,
+				2E216A501C74AD170034AE55 /* ARSPopover.m */,
+			);
+			name = ARSPopover;
 			sourceTree = "<group>";
 		};
 		2EB2296C1C6CF272003E64B3 /* Resources */ = {
@@ -516,6 +529,7 @@
 				2E0AB61B1C6AE73400D8CFC0 /* LifeWeather.m in Sources */,
 				2EB229711C6F0F5C003E64B3 /* BarButton.m in Sources */,
 				2E216A4E1C74A53D0034AE55 /* SettingViewController.m in Sources */,
+				2E216A521C74AD170034AE55 /* ARSPopover.m in Sources */,
 				2E0AB6151C6AE70F00D8CFC0 /* RealTimeWeather.m in Sources */,
 				2EB229601C6B2E46003E64B3 /* RealTimeView.m in Sources */,
 				2EB229741C6F12C1003E64B3 /* UIButton+UIImage.m in Sources */,

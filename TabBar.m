@@ -257,52 +257,31 @@
 
 
 #pragma mark  - BarButtonDelegate
+
 - (void)barButtonFirstPress:(BarButton *)sender {
     if (sender == [self.tabButtons objectAtIndex:0]) {
-        [_delegate firstTouchAtIndex:0 button:sender];
-        [self buttonAtIndex:0 enableOtherButtons:NO];
+        [_delegate barButton_0_Touched:sender];
+        //[self buttonAtIndex:0 enableOtherButtons:NO];
     }
     else if (sender == [self.tabButtons objectAtIndex:1])
     {
-        [_delegate firstTouchAtIndex:1 button:sender];
-        [self buttonAtIndex:1 enableOtherButtons:NO];
+        [_delegate barButton_1_Touched:sender];
+
+       // [self buttonAtIndex:1 enableOtherButtons:NO];
 
     }
     else if (sender == [self.tabButtons objectAtIndex:2])
     {
-        [_delegate firstTouchAtIndex:2 button:sender];
-        [self buttonAtIndex:2 enableOtherButtons:NO];
+        [_delegate barButton_2_Touched:sender];
+
+       // [self buttonAtIndex:2 enableOtherButtons:NO];
 
     }
     else if (sender == [self.tabButtons objectAtIndex:3])
     {
-        [_delegate firstTouchAtIndex:3 button:sender];
-        [self buttonAtIndex:3 enableOtherButtons:NO];
+        [_delegate barButton_3_Touched:sender];
 
-    }
-}
-
-- (void)barButtonSecondPress:(BarButton *)sender {
-    if (sender == [self.tabButtons objectAtIndex:0]) {
-        [_delegate secondTouchAtIndex:0 button:sender];
-        [self buttonAtIndex:0 enableOtherButtons:YES];
-    }
-    else if (sender == [self.tabButtons objectAtIndex:1])
-    {
-        [_delegate secondTouchAtIndex:1 button:sender];
-        [self buttonAtIndex:1 enableOtherButtons:YES];
-
-    }
-    else if (sender == [self.tabButtons objectAtIndex:2])
-    {
-        [_delegate secondTouchAtIndex:2 button:sender];
-        [self buttonAtIndex:2 enableOtherButtons:YES];
-
-    }
-    else if (sender == [self.tabButtons objectAtIndex:3])
-    {
-        [_delegate secondTouchAtIndex:3 button:sender];
-        [self buttonAtIndex:3 enableOtherButtons:YES];
+        //[self buttonAtIndex:3 enableOtherButtons:NO];
 
     }
 }
