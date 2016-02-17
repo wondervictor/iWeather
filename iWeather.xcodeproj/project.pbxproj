@@ -24,6 +24,10 @@
 		2E216A331C7407640034AE55 /* SearchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E216A321C7407640034AE55 /* SearchView.m */; };
 		2E216A371C74198A0034AE55 /* weekViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E216A351C74198A0034AE55 /* weekViewCell.m */; };
 		2E216A381C74198A0034AE55 /* weekViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E216A361C74198A0034AE55 /* weekViewCell.xib */; };
+		2E216A431C7486A80034AE55 /* AddViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E216A411C7486A80034AE55 /* AddViewController.m */; };
+		2E216A491C748C450034AE55 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E216A481C748C450034AE55 /* AboutViewController.m */; };
+		2E216A4B1C749B840034AE55 /* About.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2E216A4A1C749B840034AE55 /* About.jpg */; };
+		2E216A4E1C74A53D0034AE55 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E216A4D1C74A53D0034AE55 /* SettingViewController.m */; };
 		2EB229601C6B2E46003E64B3 /* RealTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB2295F1C6B2E46003E64B3 /* RealTimeView.m */; };
 		2EB229621C6B39D8003E64B3 /* ImageList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EB229611C6B39D8003E64B3 /* ImageList.plist */; };
 		2EB229651C6B7456003E64B3 /* TabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229641C6B7456003E64B3 /* TabBar.m */; };
@@ -98,6 +102,13 @@
 		2E216A341C74198A0034AE55 /* weekViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = weekViewCell.h; sourceTree = "<group>"; };
 		2E216A351C74198A0034AE55 /* weekViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = weekViewCell.m; sourceTree = "<group>"; };
 		2E216A361C74198A0034AE55 /* weekViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = weekViewCell.xib; sourceTree = "<group>"; };
+		2E216A401C7486A80034AE55 /* AddViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddViewController.h; sourceTree = "<group>"; };
+		2E216A411C7486A80034AE55 /* AddViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddViewController.m; sourceTree = "<group>"; };
+		2E216A471C748C450034AE55 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
+		2E216A481C748C450034AE55 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
+		2E216A4A1C749B840034AE55 /* About.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = About.jpg; sourceTree = "<group>"; };
+		2E216A4C1C74A53D0034AE55 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
+		2E216A4D1C74A53D0034AE55 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		2EB2295E1C6B2E46003E64B3 /* RealTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RealTimeView.h; sourceTree = "<group>"; };
 		2EB2295F1C6B2E46003E64B3 /* RealTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RealTimeView.m; sourceTree = "<group>"; };
 		2EB229611C6B39D8003E64B3 /* ImageList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ImageList.plist; sourceTree = "<group>"; };
@@ -239,6 +250,12 @@
 				2E0AB60E1C6AE38B00D8CFC0 /* MainViewController.m */,
 				2EB22A441C71D672003E64B3 /* SearchViewController.h */,
 				2EB22A451C71D672003E64B3 /* SearchViewController.m */,
+				2E216A401C7486A80034AE55 /* AddViewController.h */,
+				2E216A411C7486A80034AE55 /* AddViewController.m */,
+				2E216A471C748C450034AE55 /* AboutViewController.h */,
+				2E216A481C748C450034AE55 /* AboutViewController.m */,
+				2E216A4C1C74A53D0034AE55 /* SettingViewController.h */,
+				2E216A4D1C74A53D0034AE55 /* SettingViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -256,6 +273,7 @@
 			isa = PBXGroup;
 			children = (
 				2E216A2F1C73513F0034AE55 /* back.png */,
+				2E216A4A1C749B840034AE55 /* About.jpg */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -451,6 +469,7 @@
 			files = (
 				2E0AB5A81C6A4BE700D8CFC0 /* LaunchScreen.storyboard in Resources */,
 				2E216A301C73513F0034AE55 /* back.png in Resources */,
+				2E216A4B1C749B840034AE55 /* About.jpg in Resources */,
 				2E216A381C74198A0034AE55 /* weekViewCell.xib in Resources */,
 				2E0AB5A51C6A4BE700D8CFC0 /* Assets.xcassets in Resources */,
 				2E0AB5A31C6A4BE700D8CFC0 /* Main.storyboard in Resources */,
@@ -485,7 +504,9 @@
 				2EB229C01C7022AC003E64B3 /* WeatherRequest.m in Sources */,
 				2E216A331C7407640034AE55 /* SearchView.m in Sources */,
 				2E0AB6181C6AE72300D8CFC0 /* WeekWeather.m in Sources */,
+				2E216A491C748C450034AE55 /* AboutViewController.m in Sources */,
 				2EB2296B1C6C7084003E64B3 /* subButton.m in Sources */,
+				2E216A431C7486A80034AE55 /* AddViewController.m in Sources */,
 				2EB22A461C71D672003E64B3 /* SearchViewController.m in Sources */,
 				2E0AB6121C6AE6F900D8CFC0 /* WeatherParse.m in Sources */,
 				2E0AB59D1C6A4BE700D8CFC0 /* AppDelegate.m in Sources */,
@@ -494,6 +515,7 @@
 				2E0AB59A1C6A4BE700D8CFC0 /* main.m in Sources */,
 				2E0AB61B1C6AE73400D8CFC0 /* LifeWeather.m in Sources */,
 				2EB229711C6F0F5C003E64B3 /* BarButton.m in Sources */,
+				2E216A4E1C74A53D0034AE55 /* SettingViewController.m in Sources */,
 				2E0AB6151C6AE70F00D8CFC0 /* RealTimeWeather.m in Sources */,
 				2EB229601C6B2E46003E64B3 /* RealTimeView.m in Sources */,
 				2EB229741C6F12C1003E64B3 /* UIButton+UIImage.m in Sources */,

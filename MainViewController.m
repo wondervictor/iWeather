@@ -21,6 +21,9 @@
 //  Controller
 #import "MainViewController.h"
 #import "SearchViewController.h"
+#import "AddViewController.h"
+#import "AboutViewController.h"
+#import "SettingViewController.h"
 //  Frameworks
 #import <CoreLocation/CoreLocation.h>
 #import <CoreLocation/CLLocationManagerDelegate.h>
@@ -54,7 +57,8 @@
 // Controllers
 
 @property (nonatomic, strong) SearchViewController *searchViewController;
-
+@property (nonatomic, strong) AddViewController *addViewController;
+@property (nonatomic, strong) AboutViewController *aboutViewController;
 
 @end
 
@@ -131,11 +135,10 @@
     [self.view addSubview:refreshBtn];
     
     self.searchViewController = [[SearchViewController alloc]init];
-    
-    
-    
+    self.addViewController = [[AddViewController alloc]init];
+    self.aboutViewController = [[AboutViewController alloc]init];
 }
-
+                              
 - (void)reloadView {
     
 }
@@ -201,7 +204,10 @@
 }
 
 - (void)subButton_1_Action {
-
+    [self presentViewController:self.addViewController animated:YES completion:^{
+        NSLog(@"add view controller");
+    }];
+    
 }
 
 - (void)subButton_2_Action {
@@ -209,7 +215,7 @@
 }
 
 - (void)subButton_3_Action {
-    
+    [self presentViewController:self.aboutViewController animated:YES completion:nil];
 }
 
 - (void)centerButtonClick {

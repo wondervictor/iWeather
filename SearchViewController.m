@@ -23,7 +23,7 @@
 //  Controller
 #import "SearchViewController.h"
 
-@interface SearchViewController ()<WeatherRequestDelegate,UISearchBarDelegate,UIScrollViewDelegate>
+@interface SearchViewController ()<WeatherRequestDelegate,UISearchBarDelegate,UIScrollViewDelegate,SearchViewDelegate>
 
 //  滑动手势
 @property (nonatomic, strong) UISwipeGestureRecognizer *swipeGestureRecognizer;
@@ -44,7 +44,7 @@
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
     
-    self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0,XWIDTH-40 ,41 )];
+    self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0,XWIDTH-40 ,41)];
     self.searchBar.center = CGPointMake(XWIDTH/2, 200);
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"输入城市";
@@ -65,8 +65,11 @@
     */
     
     [self.view addSubview:self.searchBar];
-    
-
+    //  点击背景关闭键盘
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapBackGround:)];
+    tapGesture.numberOfTapsRequired = 1;
+    tapGesture.numberOfTouchesRequired = 1;
+    [self.view addGestureRecognizer:tapGesture];
     
     UIButton *cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake((XWIDTH-60)/2.0,XHEIGHT-60,60 , 60)];
     cancelBtn.backgroundColor = [UIColor cyanColor];
@@ -86,6 +89,10 @@
         NSLog(@"search view controller back to master view controller");
     }];
  
+}
+
+- (void)tapBackGround:(UITapGestureRecognizer *)recognizer {
+    [self.searchBar resignFirstResponder];
 }
 
 - (void)handleSwipe:(UISwipeGestureRecognizer *)sender {
@@ -154,7 +161,8 @@
         backButton.backgroundColor = [UIColor cyanColor];
         [self.view addSubview:backButton];
         
-        self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, XWIDTH, XHEIGHT)];
+        self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0,0,0,0)];
+        //(0, 64, XWIDTH, XHEIGHT-64)];
         self.scrollView.tag = 101;
         self.scrollView.backgroundColor = DEFAULT_COLOR;
         self.scrollView.delegate = self;
@@ -180,15 +188,27 @@
         [dict setObject:pm25 forKey:@"pm25"];
         SearchView *view = [[SearchView alloc]initWithFrame:CGRectMake(0, 0,XWIDTH , 700) withData:dict];
         [self.scrollView addSubview:view];
+        view.delegate = self;
+        [UIView animateWithDuration:0.4f animations:^{
+            self.scrollView.frame = CGRectMake(0, 0, XWIDTH, XHEIGHT-64);
+            self.scrollView.center = CGPointMake(XWIDTH/2, (XHEIGHT+64)/2);
+
+        } completion:^(BOOL finished) {
+            NSLog(@"OK");
+        }];
+        
+        
     });
     
 
 }
 
 - (void)backButtonPress:(UIButton *)sender {
-    [UIView animateWithDuration:1.0f animations:^{
-        self.scrollView.center = CGPointMake(XWIDTH/2, XHEIGHT*2);
-    
+    [UIView animateWithDuration:0.4f animations:^{
+        CGRect rect = CGRectMake(0, 0, 0, 0);
+        self.scrollView.frame = rect;
+        self.scrollView.center = CGPointMake(XWIDTH/2, (XHEIGHT+64)/2);
+        
     } completion:^(BOOL finished) {
         [[[self.scrollView subviews] lastObject]removeFromSuperview];
         [self.scrollView removeFromSuperview];
@@ -196,6 +216,12 @@
     }];
     
     
+}
+
+#pragma mark - SearchViewDelegate
+
+- (void)addNewCity:(NSString *)cityName {
+    NSLog(@"%@",cityName);
 }
 
 

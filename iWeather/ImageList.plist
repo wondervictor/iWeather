@@ -23,7 +23,7 @@
 	<dict>
 		<key>Img</key>
 		<string>scattered_showers_day_night</string>
-		<key>New item</key>
+		<key>img</key>
 		<string>scattered_showers_day_night-1</string>
 	</dict>
 	<dict>
@@ -46,9 +46,9 @@
 	</dict>
 	<dict>
 		<key>img</key>
-		<string>light_rain_day-1</string>
+		<string>light_rain_day_night-1</string>
 		<key>Img</key>
-		<string>light_rain_day</string>
+		<string>light_rain_day_night</string>
 	</dict>
 	<dict>
 		<key>Img</key>

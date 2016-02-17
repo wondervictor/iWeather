@@ -56,7 +56,9 @@
             _proportion = 414/320.0;
         }
         
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 40 + 160*_proportion, WIDTH, 350) style:UITableViewStylePlain ];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 350) style:UITableViewStylePlain ];
+        self.tableView.center = CGPointMake(WIDTH/2.0,40 + 160*_proportion + 175.0 );
+
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.backgroundColor = [UIColor clearColor];
         self.listWeekWeather = [dict valueForKey:@"week"];
@@ -109,7 +111,7 @@
     tempLabel.font = [UIFont fontWithName:@"Helvetica" size:40.0];
     tempLabel.backgroundColor = [UIColor clearColor];
     tempLabel.text = realTime.weatherTemp;
-    tempLabel.text = @"23";
+    tempLabel.text = realTime.weatherTemp;
     [self addSubview:tempLabel];       //  addSubView
     
     imageView = [[UIImageView alloc]initWithFrame:[self CGRectMake:CGRectMake(15+80*proportion,30 + 80*proportion , 40, 40) withProportion:proportion] ];
@@ -161,7 +163,8 @@
     
     WeekWeather *weather = [self.listWeekWeather objectAtIndex:indexPath.row];
     NSArray *day = weather.dayWeather;
-    cell.date.text = weather.date;
+    cell.backgroundColor = [UIColor clearColor];
+    cell.date.text = weather.date;   //  在iPhone4s上模拟有点问题。
     cell.image.image = [self configureImage:[day objectAtIndex:0]];
     cell.temp.text = [day objectAtIndex:2];
     cell.weather.text = [day objectAtIndex:1];
