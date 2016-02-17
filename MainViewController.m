@@ -18,6 +18,7 @@
 #import "RealTimeWeather.h"
 #import "TabBar.h"
 #import "ConditionView.h"
+#import "weekViewCell.h"
 //  Controller
 #import "MainViewController.h"
 #import "SearchViewController.h"
@@ -29,7 +30,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreLocation/CLLocationManagerDelegate.h>
 
-@interface MainViewController()<UIScrollViewDelegate,TabBarDelegate,WeatherRequestDelegate,CLLocationManagerDelegate,subButtonDelegate,ARSPopoverDelegate>
+@interface MainViewController()<UIScrollViewDelegate,TabBarDelegate,WeatherRequestDelegate,CLLocationManagerDelegate,subButtonDelegate,ARSPopoverDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     
 }
@@ -39,7 +40,7 @@
 @property (nonatomic, strong) UIPageControl *pageControl;
 
 @property (nonatomic) NSInteger numberOfCities;
-//城市列表
+// 城市列表
 @property (nonatomic, strong) NSMutableArray *cityListArray;
 
 @property (nonatomic, strong) TabBar *tabBar;
@@ -47,10 +48,12 @@
 @property (nonatomic, strong) WeatherRequest *requestEngine;
 // 存放所有城市天气的可变数组
 @property (nonatomic, strong) NSMutableArray *cityWeatherDataList;
-//可变数组存放realTimeView s
+// 可变数组存放realTimeView s
 @property (nonatomic, strong) NSMutableArray *realTimeViews;
-
-
+// 存放当前天气
+@property (nonatomic, strong) NSDictionary *currentWeatherData;
+// 存放当前一周天气
+@property (nonatomic, strong) NSArray *currentWeekWeatherList;
 //  CLLocation
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSString *locationCityName;
@@ -151,13 +154,14 @@
 
 - (void)loadCenterWeatherView:(NSDictionary *)weatherData {
    //   58 页崩溃数据报告
+    //NSLog(@"%@",self.currentWeatherData);
     dispatch_async(dispatch_get_main_queue(), ^{
         
     RealTimeWeather *realTime = [[RealTimeWeather alloc]init];
     WeatherParse *parser = [WeatherParse sharedManager];
     realTime = [parser parseRealTimeWeather:weatherData];
     NSDictionary *dictForCondition = [parser parseForConditionView:weatherData];
-    
+        self.currentWeekWeatherList = [parser getWeekWeatherArray:weatherData];
     RealTimeView *realTimeView = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 0, XWIDTH, 3*(XHEIGHT-114)/4) withRealTimeWeather:realTime];
     [self.weatherScrollView addSubview:realTimeView];
         
@@ -212,6 +216,7 @@
 }
 
 - (void)subButton_2_Action {
+   // NSLog(@"%@",self.currentWeekWeatherList);
 
 }
 
@@ -220,18 +225,25 @@
 }
 
 - (void)centerButtonClick {
-    
 }
 //  TabBar Button_1_WeekTemp
 - (void)barButton_0_Touched:(BarButton *)sender {
     ARSPopover *popoverController = [ARSPopover new];
         popoverController.sourceView = sender;
     popoverController.sourceRect =CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
-    popoverController.contentSize = CGSizeMake(XWIDTH, 200);
+    popoverController.contentSize = CGSizeMake(XWIDTH, 230);
     popoverController.arrowDirection = UIPopoverArrowDirectionDown;
     [self presentViewController:popoverController animated:YES completion:^{
         [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
- 
+            UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 10, 320, 210) style:UITableViewStylePlain ];
+            tableView.center = CGPointMake(XWIDTH/2, 115);
+            tableView.delegate = self;
+            tableView.dataSource = self;
+            tableView.backgroundColor = [UIColor clearColor];
+            [tableView registerNib:[UINib nibWithNibName:NSStringFromClass([weekViewCell class]) bundle:nil] forCellReuseIdentifier:@"weekCell"];
+            [popover.view addSubview:tableView];
+
+            
         }];
     }];
 
@@ -265,6 +277,8 @@
 }
 //  TabBar Button_4_Info (life)
 - (void)barButton_3_Touched:(BarButton *)sender {
+    
+    
     ARSPopover *popoverController = [ARSPopover new];
     popoverController.sourceView = sender;
     popoverController.sourceRect = CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
@@ -283,6 +297,7 @@
 - (void)weatherRequestFinished:(NSDictionary *)data withError:(NSString *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     if (error == nil) {
+        self.currentWeatherData = data;
         [self loadCenterWeatherView:data];
     }
     else if (error!=nil) {
@@ -352,7 +367,49 @@
     }
     
 }
+#pragma mark - UITableViewDataSource
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 30;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 7;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    weekViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"weekCell" forIndexPath:indexPath];
+    
+    WeekWeather *weather = [self.currentWeekWeatherList objectAtIndex:indexPath.row];
+    NSArray *day = weather.dayWeather;
+    cell.backgroundColor = [UIColor clearColor];
+    cell.date.text = weather.date;   //  在iPhone4s上模拟有点问题。
+    //cell.image
+    cell.image.image = [self configureImage:[day objectAtIndex:0]];
+    CGRect frame = cell.image.frame;
+    frame.size.height = 30.0;
+    frame.size.width = 30.0;
+    cell.image.frame = frame;
+    cell.temp.text = [day objectAtIndex:2];
+    cell.weather.font = [UIFont systemFontOfSize:15];
+    cell.temp.font = [UIFont systemFontOfSize:15];
+    cell.weather.text = [day objectAtIndex:1];
+    return cell;
+}
+
+- (UIImage *)configureImage:(NSString *)imageNum
+{
+    NSInteger row = imageNum.integerValue;
+    NSString *filePath = [[NSBundle mainBundle]pathForResource:@"ImageList" ofType:@"plist"];
+    NSArray *listImage = [[NSArray alloc]initWithContentsOfFile:filePath];
+    NSDictionary *dict = [listImage objectAtIndex:row];
+    UIImage *image = [UIImage imageNamed:[dict valueForKey:@"img"]];
+    return image;
+}
 // Refresh
 #pragma  mark - subButtonDelegate 
 - (void)subButtonPress:(subButton *)button {
