@@ -41,21 +41,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = DEFAULT_COLOR;
-    self.swipeGestureRecognizer  = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
-    self.swipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionDown;
-  //  [self.view addGestureRecognizer:self.swipeGestureRecognizer];     //   shut gesture
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
     
-    self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 64,XWIDTH ,41 )];
+    self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0,XWIDTH-40 ,41 )];
+    self.searchBar.center = CGPointMake(XWIDTH/2, 200);
     self.searchBar.delegate = self;
     self.searchBar.placeholder = @"输入城市";
     self.searchBar.keyboardType = UIKeyboardTypeDefault;
 
     [self.searchBar setBarTintColor:DEFAULT_COLOR];
-    self.searchBar.showsCancelButton = YES;
+    //self.searchBar.showsCancelButton = YES;
     self.searchBar.backgroundImage = [UIImage imageNamed:@"back.png"];
-    [self.searchBar setTintColor:[UIColor whiteColor]];
    /**
     UIView *views = [[self.searchBar subviews] objectAtIndex:0];
     for (id object in [views subviews]) {
@@ -84,15 +81,16 @@
 }
 
 - (void)cancelButtonClick:(UIButton *)sender {
+  
     [self dismissViewControllerAnimated:YES completion:^{
         NSLog(@"search view controller back to master view controller");
     }];
+ 
 }
 
 - (void)handleSwipe:(UISwipeGestureRecognizer *)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-        NSLog(@"search view controller back to master view controller");
-    }];
+    [[self.scrollView.subviews lastObject]removeFromSuperview];
+    [self.scrollView removeFromSuperview];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -147,13 +145,26 @@
     // UI  搭建
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, XWIDTH, XHEIGHT)];
         
+        UIButton *backButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 30, 50, 30)];
+        [backButton setTitle:@"返回" forState:UIControlStateNormal];
+        [backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [backButton addTarget:self action:@selector(backButtonPress:) forControlEvents:UIControlEventTouchDown];
+        backButton.layer.cornerRadius = 5.0f;
+        backButton.backgroundColor = [UIColor cyanColor];
+        [self.view addSubview:backButton];
+        
+        self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 64, XWIDTH, XHEIGHT)];
+        self.scrollView.tag = 101;
         self.scrollView.backgroundColor = DEFAULT_COLOR;
         self.scrollView.delegate = self;
         self.scrollView.contentSize = CGSizeMake(XWIDTH, 700);
         self.scrollView.pagingEnabled = YES;
         self.scrollView.showsVerticalScrollIndicator = NO;
+        self.swipeGestureRecognizer  = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
+        self.swipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+        [self.scrollView addGestureRecognizer:self.swipeGestureRecognizer];     //   shut gesture
+
         [self.view addSubview:self.scrollView];
         
         WeatherParse *paser = [WeatherParse sharedManager];
@@ -174,9 +185,30 @@
 
 }
 
+- (void)backButtonPress:(UIButton *)sender {
+    [UIView animateWithDuration:1.0f animations:^{
+        self.scrollView.center = CGPointMake(XWIDTH/2, XHEIGHT*2);
+    
+    } completion:^(BOOL finished) {
+        [[[self.scrollView subviews] lastObject]removeFromSuperview];
+        [self.scrollView removeFromSuperview];
+        [sender removeFromSuperview];
+    }];
+    
+    
+}
+
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+     UIScrollView *view = [self.view viewWithTag:101];
+    [[view.subviews lastObject]removeFromSuperview];
+    [view removeFromSuperview];
+    
 }
 
 - (void)didReceiveMemoryWarning {
