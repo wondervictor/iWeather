@@ -20,6 +20,15 @@
 
 @property (nonatomic, strong) UILabel *tempLabel;
 
-- (id)initWithFrame:(CGRect)frame withRealTimeWeather:(RealTimeWeather *)realWeather;
+@property (nonatomic, strong) UILabel *sunrise;
+@property (nonatomic, strong) UILabel *sunset;
+@property (nonatomic, strong) UILabel *lunarDate;
+@property (nonatomic, strong) UILabel *pollution;
+@property (nonatomic, strong) UILabel *uvrays;
+@property (nonatomic, strong) UILabel *windDirection;
+@property (nonatomic, strong) UILabel *windSpeed;
+@property (nonatomic, strong) UILabel *humidty;
+
+- (id)initWithFrame:(CGRect)frame withRealTimeWeather:(RealTimeWeather *)realWeather withConditionData:(NSDictionary *)dict;
 
 @end

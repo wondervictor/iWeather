@@ -25,17 +25,22 @@
                                     @"key":@"5e9055bef55f2e0ac8e3fdb4c0315629"};
     OneNetWork *oneNetWork = [OneNetWork sharedManager];
     [oneNetWork asynchronousRequestWithURLString:self.requestUrl WithRequestMethod:@"POST" params:requestParams withCompletion:^(NSData *data, NSURLResponse *response) {
-        WeatherParse *paser = [WeatherParse sharedManager];
-        NSDictionary *dict = [paser getWeatherData:data];
-        
-        if ([dict isEqual:[NSNull null]]) {
-            [_delegate weatherRequestFinished:nil withError:@"1"];
+        if (data != nil) {
+            WeatherParse *paser = [WeatherParse sharedManager];
+            NSDictionary *dict = [paser getWeatherData:data];
+            if ([data isEqual:[NSNull null]]) {
+                [_delegate weatherRequestFinished:nil withError:@"1"];
+            }
+            else{
+                [_delegate weatherRequestFinished:dict withError:nil];
+            }
+            
         }
-        else{
-            [_delegate weatherRequestFinished:dict withError:nil];
+        else {
+            [_delegate weatherRequestFinished:nil withError:@"3"];
         }
-        
     } withError:^(NSError *error) {
+        NSLog(@"def3");
         [_delegate weatherRequestFinished:nil withError:@"2"];
     }];
 }

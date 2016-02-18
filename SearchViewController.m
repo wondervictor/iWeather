@@ -34,6 +34,7 @@
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 
+@property (nonatomic, strong) UINavigationBar *navigationBar;
 @end
 
 @implementation SearchViewController
@@ -43,6 +44,14 @@
     self.view.backgroundColor = DEFAULT_COLOR;
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
+    self.navigationBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 0,XWIDTH , 64)];
+    UINavigationItem *item = [[UINavigationItem alloc]initWithTitle:@""];
+    [item setTitle:@"搜索"];
+    [[UINavigationBar appearance]setBarTintColor:DEFAULT_COLOR];
+
+    [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName :[UIColor whiteColor]}];
+    [self.navigationBar pushNavigationItem:item animated:YES];
+    [self.view addSubview:self.navigationBar];
     
     self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0,XWIDTH-40 ,41)];
     self.searchBar.center = CGPointMake(XWIDTH/2, 200);
@@ -78,9 +87,39 @@
     [cancelBtn addTarget:self action:@selector(cancelButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelBtn];
     
+    // 热门城市
+    // 北京
+    UIButton *button_1 = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 60, 30)];
+    button_1.center = CGPointMake(XWIDTH/2, 300);
+    [button_1 setTitle:@"北京" forState:UIControlStateNormal];
+    [button_1 addTarget:self action:@selector(searchHotCity:) forControlEvents:UIControlEventTouchDown];
+    button_1.backgroundColor = [UIColor clearColor];
+    [button_1 setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
+    //.titleLabel.textColor = [UIColor orangeColor];
+    // 上海
+    UIButton *button_2 = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 60, 30)];
+    button_2.center = CGPointMake(XWIDTH/2, 350);
+    [button_2 setTitle:@"上海" forState:UIControlStateNormal];
+    [button_2 addTarget:self action:@selector(searchHotCity:) forControlEvents:UIControlEventTouchDown];
+    button_2.backgroundColor = [UIColor clearColor];
+    [button_2 setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
     
+    [self.view addSubview:button_1];
+    [self.view addSubview:button_2];
     
     // Do any additional setup after loading the view.
+}
+
+- (void)searchHotCity:(UIButton *)sender {
+    if ([sender.titleLabel.text isEqualToString:@"北京"]) {
+        [self.requestEngine startRequestWithCityName:@"北京"];
+    }
+    else if ([sender.titleLabel.text isEqualToString:@"上海"])
+    {
+        [self.requestEngine startRequestWithCityName:@"上海"];
+
+    }
+    
 }
 
 - (void)cancelButtonClick:(UIButton *)sender {
@@ -204,6 +243,7 @@
 }
 
 - (void)backButtonPress:(UIButton *)sender {
+    [sender removeFromSuperview];
     [UIView animateWithDuration:0.4f animations:^{
         CGRect rect = CGRectMake(0, 0, 0, 0);
         self.scrollView.frame = rect;
@@ -212,7 +252,6 @@
     } completion:^(BOOL finished) {
         [[[self.scrollView subviews] lastObject]removeFromSuperview];
         [self.scrollView removeFromSuperview];
-        [sender removeFromSuperview];
     }];
     
     

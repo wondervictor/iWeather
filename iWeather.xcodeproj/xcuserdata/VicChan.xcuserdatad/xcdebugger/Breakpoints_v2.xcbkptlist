@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iWeather/WeatherRequest.m"
-            timestampString = "477113254.760539"
+            timestampString = "477490020.675176"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
             landmarkName = "-startRequestWithCityName:"
             landmarkType = "5">
          </BreakpointContent>

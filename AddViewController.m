@@ -36,7 +36,7 @@
     UIBarButtonItem *rightBtn = [[UIBarButtonItem alloc]initWithTitle:@"添加" style:UIBarButtonItemStylePlain target:self action:@selector(addItems:)];
     UIBarButtonItem *leftBtn = [[UIBarButtonItem alloc]initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteItems:)];
     [[UINavigationBar appearance]setBarTintColor:DEFAULT_COLOR];
-    [item setTitle:@"iWeather List"];
+    [item setTitle:@"iWeather城市列表"];
     [item setLeftBarButtonItem:leftBtn];
     [item setRightBarButtonItem:rightBtn];
     [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName :[UIColor whiteColor]}];
@@ -130,7 +130,15 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"DidDeleteCityNotification" object:[self.cityList objectAtIndex:indexPath.row]];
+        [self.cityList removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 /*

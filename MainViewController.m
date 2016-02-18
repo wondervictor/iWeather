@@ -68,6 +68,8 @@
 @property (nonatomic, strong) AboutViewController *aboutViewController;
 @property (nonatomic, strong) SettingViewController *settingViewController;
 
+//  推送内容
+@property (nonatomic, strong) NSString *notificationString;
 @end
 
 /**
@@ -87,6 +89,7 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    
     self.view.backgroundColor = DEFAULT_COLOR;
     self.cityListArray = [[NSMutableArray alloc]init];
     self.numberOfCities = [self getNumberOfCities];
@@ -105,6 +108,10 @@
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
     [self.requestEngine startRequestWithCityName:@"宜都"];
+    OneHUD *hud = [[OneHUD alloc]initWithFrame:CGRectMake(0, 0, 150, 150) withPointDiameter:16 interval:0.25];
+    hud.center = self.view.center;
+    hud.tag = 211;
+    [self.view addSubview:hud];
     
     
     // Core Location
@@ -114,8 +121,6 @@
         [self.locationManager requestWhenInUseAuthorization];
         [self.locationManager requestAlwaysAuthorization];
     }
-    [self locate];
-    
     
     CGFloat settingWidth = 150;
     if (XWIDTH <375) {
@@ -160,13 +165,38 @@
     self.addViewController = [[AddViewController alloc]init];
     self.aboutViewController = [[AboutViewController alloc]init];
     self.settingViewController = [[SettingViewController alloc]init];
+    //  推送本地通知
+    UILocalNotification *weatherNotification = [[UILocalNotification alloc]init];
+    if (weatherNotification != nil) {
+        weatherNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:0];
+        weatherNotification.repeatInterval = kCFCalendarUnitDay;
+        weatherNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:10.0f];
+        weatherNotification.alertBody = self.notificationString;
+        weatherNotification.timeZone = [NSTimeZone defaultTimeZone];
+        weatherNotification.alertTitle = @"今日天气";
+        weatherNotification.soundName =UILocalNotificationDefaultSoundName;
+        weatherNotification.applicationIconBadgeNumber = 1;
+        weatherNotification.alertAction = @"查看";
+    }
+    [[UIApplication sharedApplication]scheduleLocalNotification:weatherNotification];
+    
 }
-                              
+
+- (NSString *)notificationString {
+    if (_notificationString == nil) {
+        _notificationString = @"hello";
+#warning Notification  有网络
+    }
+    return _notificationString;
+}
+
+
 - (void)reloadView {
     
 }
 
 - (void)refreshData {
+#warning refresh
     /*
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     for (NSString *name in self.cityListArray) {
@@ -178,9 +208,8 @@
 
 
 - (void)locationButtonPress:(UIButton *)sender {
-    OneHUD *hud = [[OneHUD alloc]initWithFrame:CGRectMake(0, 0, 100, 100) withPointDiameter:16 interval:0.25];
-    hud.center = self.view.center;
-    [self.view addSubview:hud];
+    [self.locationManager startUpdatingLocation];
+    // 定位Button
 }
 
 - (void)loadCenterWeatherView:(NSDictionary *)weatherData {
@@ -193,11 +222,14 @@
     realTime = [parser parseRealTimeWeather:weatherData];
     NSDictionary *dictForCondition = [parser parseForConditionView:weatherData];
     self.currentWeekWeatherList = [parser getWeekWeatherArray:weatherData];
-    RealTimeView *realTimeView = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 0, XWIDTH, 3*(XHEIGHT-114)/4) withRealTimeWeather:realTime];
+        
+        
+    RealTimeView *realTimeView = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 0, XWIDTH,XHEIGHT-114 ) withRealTimeWeather:realTime withConditionData:dictForCondition];
+        
     [self.weatherScrollView addSubview:realTimeView];
         
-    ConditionView *conditionView = [[ConditionView alloc]initWithFrame:CGRectMake(0, 3*(XHEIGHT-114)/4, XWIDTH, (XHEIGHT - 114)/4) withData:dictForCondition];
-    [self.weatherScrollView addSubview:conditionView];
+    //ConditionView *conditionView = [[ConditionView alloc]initWithFrame:CGRectMake(0, 3*(XHEIGHT-114)/4, XWIDTH, (XHEIGHT - 114)/4) withData:dictForCondition];
+   // [self.weatherScrollView addSubview:conditionView];
     
     });
 }
@@ -207,6 +239,7 @@
     if (list != nil) {
         [self.cityListArray addObjectsFromArray:list];
     }
+    NSLog(@"%@",[self cityListDataPath]);
     list = @[@"北京",@"上海",@"武汉"];
     [self.cityListArray addObjectsFromArray:list];
     NSInteger num = [self.cityListArray count];
@@ -225,7 +258,7 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    
+ //  刷新
 }
 
 #pragma mark  TabBarDelegate
@@ -346,7 +379,12 @@
 
 - (void)weatherRequestFinished:(NSDictionary *)data withError:(NSString *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+
     if (error == nil) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OneHUD *hud = [self.view viewWithTag:211];
+            [hud removeFromSuperview];
+        });
         self.currentWeatherData = data;
         [self loadCenterWeatherView:data];
     }
@@ -357,7 +395,30 @@
 }
 //  请求错误.
 - (void)requestError:(NSString *)error {
-    
+    if ([error isEqualToString:@"3"]) {
+        NSLog(@"网络连接故障");
+        sleep(1);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"网络连接故障" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];            UIAlertAction *refreshAction = [UIAlertAction actionWithTitle:@"刷新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+#warning refresh
+#warning 缓存
+                [self.requestEngine startRequestWithCityName:@""];
+            }];
+            [alert addAction:cancelAction];
+            [alert addAction:refreshAction];
+        
+            [self presentViewController:alert animated:YES completion:^{
+                OneHUD *hud = [self.view viewWithTag:211];
+                [hud removeFromSuperview];
+            }];
+        });
+        
+        
+    }
+    else if ([error isEqualToString:@"2"]) {
+        NSLog(@"无法获取城市信息");
+    }
 }
 
 

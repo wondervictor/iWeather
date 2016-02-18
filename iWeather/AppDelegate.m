@@ -6,11 +6,9 @@
 //  Copyright © 2016年 VicChan. All rights reserved.
 //
 #import "AppDelegate.h"
-#import "AddViewController.h"
 
 @interface AppDelegate ()
-@property (nonatomic, strong) UINavigationController *navigationController;
-@property (nonatomic, strong) AddViewController *addViewController;
+
 
 @end
 
@@ -19,9 +17,31 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    application.applicationIconBadgeNumber = 0;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
     [NSThread sleepForTimeInterval:2.0f];
+    
+    UIMutableUserNotificationAction *action_1 = [UIMutableUserNotificationAction new];
+    action_1.identifier = @"ACTION_1";
+    action_1.title = @"打开应用";
+    action_1.activationMode = UIUserNotificationActivationModeForeground;
+    action_1.authenticationRequired = YES;
+    action_1.destructive = NO;
+    
+    UIMutableUserNotificationAction *action_2 = [UIMutableUserNotificationAction new];
+    action_2.identifier = @"ACTION_2";
+    action_2.title = @"我知道了";
+    action_2.activationMode = UIUserNotificationActivationModeBackground;
+    action_2.authenticationRequired = NO;
+    action_2.destructive = YES;
+    
+    
+    UIMutableUserNotificationCategory *category = [UIMutableUserNotificationCategory new];
+    category.identifier = @"CATEGORY";
+    [category setActions:@[action_2,action_1] forContext:UIUserNotificationActionContextDefault];
+    NSSet *categories = [NSSet setWithObjects:category, nil];
+    UIUserNotificationSettings *setting = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge|UIUserNotificationTypeAlert|UIUserNotificationTypeSound categories:categories];
+    [application registerUserNotificationSettings:setting];
     return YES;
 }
 
@@ -47,7 +67,9 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    NSLog(@"received   Notification");
+}
 
 
 @end

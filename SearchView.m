@@ -163,11 +163,14 @@
     
     WeekWeather *weather = [self.listWeekWeather objectAtIndex:indexPath.row];
     NSArray *day = weather.dayWeather;
-    cell.backgroundColor = [UIColor clearColor];
+    cell.backgroundColor = [UIColor colorWithWhite:1 alpha:0.2];
     cell.date.text = weather.date;   //  在iPhone4s上模拟有点问题。
     cell.image.image = [self configureImage:[day objectAtIndex:0]];
-    cell.temp.text = [day objectAtIndex:2];
+    cell.temp.text = [NSString stringWithFormat:@"%@°",[day objectAtIndex:2]];
+    cell.temp.textColor = [UIColor orangeColor];
     cell.weather.text = [day objectAtIndex:1];
+    cell.weather.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
+    cell.weather.textColor = [UIColor whiteColor];
     return cell;
 }
 
