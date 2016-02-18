@@ -6,9 +6,11 @@
 //  Copyright © 2016年 VicChan. All rights reserved.
 //
 #import "AppDelegate.h"
+#import "AddViewController.h"
 
 @interface AppDelegate ()
-
+@property (nonatomic, strong) UINavigationController *navigationController;
+@property (nonatomic, strong) AddViewController *addViewController;
 
 @end
 
@@ -18,6 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
     [NSThread sleepForTimeInterval:2.0f];
     return YES;
 }

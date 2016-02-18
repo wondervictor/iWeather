@@ -221,7 +221,10 @@
 #pragma mark - SearchViewDelegate
 
 - (void)addNewCity:(NSString *)cityName {
-    NSLog(@"%@",cityName);
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"GetNewCityNotification_1" object:cityName userInfo:nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"GetNewCityNotification_2" object:cityName userInfo:nil];
+    [self dismissViewControllerAnimated:YES completion:^{}];
+    
 }
 
 
