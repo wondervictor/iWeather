@@ -21,6 +21,7 @@
 #import "weekViewCell.h"
 #import "PMView.h"
 #import "LifeView.h"
+#import "OneHUD.h"
 //  Controller
 #import "MainViewController.h"
 #import "SearchViewController.h"
@@ -148,6 +149,13 @@
     [refreshBtn setImage:[UIImage imageNamed:@"refresh"] forState:UIControlStateNormal];
     [self.view addSubview:refreshBtn];
     
+    UIButton *locationBtn = [[UIButton alloc]initWithFrame:CGRectMake(20, 22, 30, 30)];
+    [locationBtn setImage:[UIImage imageNamed:@"location"] forState:UIControlStateNormal];
+    locationBtn.layer.cornerRadius = 15.0f;
+    locationBtn.layer.masksToBounds = YES;
+    [locationBtn addTarget:self action:@selector(locationButtonPress:) forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:locationBtn];
+    
     self.searchViewController = [[SearchViewController alloc]init];
     self.addViewController = [[AddViewController alloc]init];
     self.aboutViewController = [[AboutViewController alloc]init];
@@ -159,9 +167,21 @@
 }
 
 - (void)refreshData {
+    /*
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    for (NSString *name in self.cityListArray) {
+        [self.requestEngine startRequestWithCityName:name];
+    }
+     */
     
 }
 
+
+- (void)locationButtonPress:(UIButton *)sender {
+    OneHUD *hud = [[OneHUD alloc]initWithFrame:CGRectMake(0, 0, 100, 100) withPointDiameter:16 interval:0.25];
+    hud.center = self.view.center;
+    [self.view addSubview:hud];
+}
 
 - (void)loadCenterWeatherView:(NSDictionary *)weatherData {
    //   58 页崩溃数据报告
@@ -217,7 +237,6 @@
     [self presentViewController:self.searchViewController animated:YES completion:^{
         NSLog(@"search view controller");
     }];
-    
     
 }
 
@@ -432,19 +451,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView.tag == 111) {
-
     weekViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"weekCell" forIndexPath:indexPath];
     WeekWeather *weather = [self.currentWeekWeatherList objectAtIndex:indexPath.row];
     NSArray *day = weather.dayWeather;
     cell.backgroundColor = [UIColor clearColor];
     cell.date.text = weather.date;   //  在iPhone4s上模拟有点问题。
-    //cell.image
+    cell.date.textColor = [UIColor grayColor];
     cell.image.image = [self configureImage:[day objectAtIndex:0]];
     CGRect frame = cell.image.frame;
     frame.size.height = 30.0;
     frame.size.width = 30.0;
     cell.image.frame = frame;
     cell.temp.text = [NSString stringWithFormat:@"%@°",[day objectAtIndex:2]];
+    cell.temp.textColor = [UIColor orangeColor];
     cell.weather.font = [UIFont systemFontOfSize:15];
     cell.temp.font = [UIFont systemFontOfSize:15];
     cell.weather.text = [day objectAtIndex:1];
@@ -485,7 +504,7 @@
     //[self.requestEngine startRequestWithCityName:@"宜都"];
 }
 
-#pragma mark <ARSPopoverDelegate>
+#pragma mark - ARSPopoverDelegate
 
 - (void)popoverPresentationController:(UIPopoverPresentationController *)popoverPresentationController willRepositionPopoverToRect:(inout CGRect *)rect inView:(inout UIView *__autoreleasing *)view {
     // delegate for you to use.
