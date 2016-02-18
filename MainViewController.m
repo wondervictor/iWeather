@@ -19,6 +19,8 @@
 #import "TabBar.h"
 #import "ConditionView.h"
 #import "weekViewCell.h"
+#import "PMView.h"
+
 //  Controller
 #import "MainViewController.h"
 #import "SearchViewController.h"
@@ -63,6 +65,7 @@
 @property (nonatomic, strong) SearchViewController *searchViewController;
 @property (nonatomic, strong) AddViewController *addViewController;
 @property (nonatomic, strong) AboutViewController *aboutViewController;
+@property (nonatomic, strong) SettingViewController *settingViewController;
 
 @end
 
@@ -70,8 +73,6 @@
    *  plist 存储城市数据.
    *  缓存.
  */
-
-
 
 
 @implementation MainViewController
@@ -129,6 +130,15 @@
     self.tabBar.delegate = self;
     [self.view addSubview:self.tabBar];
     
+    // title
+    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 20, 200, 44) ];
+    titleLabel.center = CGPointMake(XWIDTH/2, 42);
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25];
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.text = @"iWeather";
+    [self.view addSubview:titleLabel];
     
     // refreshButton
     subButton *refreshBtn = [[subButton alloc]initWithFrame:CGRectMake(XWIDTH - 50,22,30 , 30)];
@@ -141,6 +151,7 @@
     self.searchViewController = [[SearchViewController alloc]init];
     self.addViewController = [[AddViewController alloc]init];
     self.aboutViewController = [[AboutViewController alloc]init];
+    self.settingViewController = [[SettingViewController alloc]init];
 }
                               
 - (void)reloadView {
@@ -161,7 +172,7 @@
     WeatherParse *parser = [WeatherParse sharedManager];
     realTime = [parser parseRealTimeWeather:weatherData];
     NSDictionary *dictForCondition = [parser parseForConditionView:weatherData];
-        self.currentWeekWeatherList = [parser getWeekWeatherArray:weatherData];
+    self.currentWeekWeatherList = [parser getWeekWeatherArray:weatherData];
     RealTimeView *realTimeView = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 0, XWIDTH, 3*(XHEIGHT-114)/4) withRealTimeWeather:realTime];
     [self.weatherScrollView addSubview:realTimeView];
         
@@ -176,6 +187,8 @@
     if (list != nil) {
         [self.cityListArray addObjectsFromArray:list];
     }
+    list = @[@"北京",@"上海",@"武汉"];
+    [self.cityListArray addObjectsFromArray:list];
     NSInteger num = [self.cityListArray count];
     return num;
 }
@@ -216,8 +229,9 @@
 }
 
 - (void)subButton_2_Action {
-   // NSLog(@"%@",self.currentWeekWeatherList);
-
+[self presentViewController:self.settingViewController animated:YES completion:^{
+    NSLog(@"setting View Controller");
+}];
 }
 
 - (void)subButton_3_Action {
@@ -237,6 +251,7 @@
         [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
             UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 10, 320, 210) style:UITableViewStylePlain ];
             tableView.center = CGPointMake(XWIDTH/2, 115);
+            tableView.tag = 111;
             tableView.delegate = self;
             tableView.dataSource = self;
             tableView.backgroundColor = [UIColor clearColor];
@@ -253,11 +268,15 @@
     ARSPopover *popoverController = [ARSPopover new];
     popoverController.sourceView = sender;
     popoverController.sourceRect = CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
-    popoverController.contentSize = CGSizeMake(XWIDTH, 200);
+    popoverController.contentSize = CGSizeMake(XWIDTH, 180);
     popoverController.arrowDirection = UIPopoverArrowDirectionDown;
     [self presentViewController:popoverController animated:YES completion:^{
         [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
-  
+            WeatherParse *parser = [WeatherParse sharedManager];
+            NSDictionary *pm25Dictionary = [parser parseForPM25:self.currentWeatherData];
+            PMView *view = [[PMView alloc]initWithFrame:CGRectMake(10, 0, XWIDTH-30,180 ) withData:pm25Dictionary];
+            [popover.view addSubview:view];
+            
         }];
     }];
 
@@ -267,10 +286,19 @@
     ARSPopover *popoverController = [ARSPopover new];
     popoverController.sourceView = sender;
     popoverController.sourceRect = CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
-    popoverController.contentSize = CGSizeMake(XWIDTH, 200);
+    popoverController.contentSize = CGSizeMake(XWIDTH, 40*self.numberOfCities + 20);
     popoverController.arrowDirection = UIPopoverArrowDirectionDown;
     [self presentViewController:popoverController animated:YES completion:^{
         [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
+            UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 10, 320, 40*self.numberOfCities) style:UITableViewStylePlain];
+            tableView.tag = 222;
+            tableView.center = CGPointMake(XWIDTH/2, 10 + 20*self.numberOfCities);
+            tableView.delegate = self;
+            tableView.dataSource = self;
+            tableView.backgroundColor = [UIColor clearColor];
+            [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+            [popover.view addSubview:tableView];
+            
             
         }];
     }];
@@ -286,6 +314,11 @@
     popoverController.arrowDirection = UIPopoverArrowDirectionDown;
     [self presentViewController:popoverController animated:YES completion:^{
         [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
+            WeatherParse *parser = [WeatherParse sharedManager];
+            LifeWeather *life = [parser parseLifeWeather:self.currentWeatherData];
+            
+            
+            
             
         }];
     }];
@@ -370,20 +403,40 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+
     return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 30;
+    if (tableView.tag == 111) {
+        return 30;
+
+    }
+    else if (tableView.tag == 222) {
+        return 40;
+    }
+    else {
+        return 0;
+    }
+ 
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 7;
+    
+    if (tableView.tag == 111) {
+        return 7;
+    }
+    else if (tableView.tag == 222) {
+        return self.numberOfCities;
+    }
+    return 0;
 }
 
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView.tag == 111) {
+
     weekViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"weekCell" forIndexPath:indexPath];
-    
     WeekWeather *weather = [self.currentWeekWeatherList objectAtIndex:indexPath.row];
     NSArray *day = weather.dayWeather;
     cell.backgroundColor = [UIColor clearColor];
@@ -394,13 +447,23 @@
     frame.size.height = 30.0;
     frame.size.width = 30.0;
     cell.image.frame = frame;
-    cell.temp.text = [day objectAtIndex:2];
+    cell.temp.text = [NSString stringWithFormat:@"%@°",[day objectAtIndex:2]];
     cell.weather.font = [UIFont systemFontOfSize:15];
     cell.temp.font = [UIFont systemFontOfSize:15];
     cell.weather.text = [day objectAtIndex:1];
     return cell;
+    }
+    else if (tableView.tag == 222) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
+        cell.textLabel.text = [self.cityListArray objectAtIndex:indexPath.row];
+        cell.backgroundColor = [UIColor clearColor];
+        cell.textLabel.textColor = [UIColor grayColor];
+        return cell;
+    }
+    return nil;
 }
-
+//   配置天气图片
 - (UIImage *)configureImage:(NSString *)imageNum
 {
     NSInteger row = imageNum.integerValue;
@@ -410,6 +473,15 @@
     UIImage *image = [UIImage imageNamed:[dict valueForKey:@"img"]];
     return image;
 }
+
+#pragma mark - UITableViewDelegate
+// Location - TableView 的选中事件
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView.tag == 222) {
+        NSLog(@"%@",[self.cityListArray objectAtIndex:indexPath.row]);
+    }
+}
+
 // Refresh
 #pragma  mark - subButtonDelegate 
 - (void)subButtonPress:(subButton *)button {
