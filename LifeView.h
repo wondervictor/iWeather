@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LifeWeather.h"
 
 @interface LifeView : UIView
+
+- (id)initWithFrame:(CGRect)frame withData:(LifeWeather *)life;
 
 @end

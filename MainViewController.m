@@ -20,7 +20,7 @@
 #import "ConditionView.h"
 #import "weekViewCell.h"
 #import "PMView.h"
-
+#import "LifeView.h"
 //  Controller
 #import "MainViewController.h"
 #import "SearchViewController.h"
@@ -299,7 +299,6 @@
             [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
             [popover.view addSubview:tableView];
             
-            
         }];
     }];
 }
@@ -310,15 +309,14 @@
     ARSPopover *popoverController = [ARSPopover new];
     popoverController.sourceView = sender;
     popoverController.sourceRect = CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
-    popoverController.contentSize = CGSizeMake(XWIDTH, 200);
+    popoverController.contentSize = CGSizeMake(XWIDTH, 300);
     popoverController.arrowDirection = UIPopoverArrowDirectionDown;
     [self presentViewController:popoverController animated:YES completion:^{
         [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
             WeatherParse *parser = [WeatherParse sharedManager];
             LifeWeather *life = [parser parseLifeWeather:self.currentWeatherData];
-            
-            
-            
+            LifeView *view = [[LifeView alloc]initWithFrame:CGRectMake(10, 10, XWIDTH-30, 300) withData:life];
+            [popover.view addSubview:view];
             
         }];
     }];
@@ -375,7 +373,6 @@
         }
         
     }];
-    
     
 }
 

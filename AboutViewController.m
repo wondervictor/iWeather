@@ -41,7 +41,7 @@
     
     
     UIButton *rankBtn = [[UIButton alloc]initWithFrame:CGRectMake(0,0 ,200 , 40)];
-    rankBtn.center = CGPointMake(XWIDTH/2, 320);
+    rankBtn.center = CGPointMake(XWIDTH/2, 340);
     rankBtn.backgroundColor = [UIColor orangeColor];
     rankBtn.layer.cornerRadius = 5.0f;
     [rankBtn setTitle:@"给我们评分" forState:UIControlStateNormal];
@@ -51,7 +51,7 @@
     [self.view addSubview:rankBtn];
     
     self.versionLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 40)];
-    self.versionLabel.center = CGPointMake(XWIDTH/2, 270);
+    self.versionLabel.center = CGPointMake(XWIDTH/2, 290);
     self.versionLabel.textAlignment = NSTextAlignmentCenter;
     self.versionLabel.backgroundColor = [UIColor clearColor];
     self.versionLabel.textColor = [UIColor whiteColor];
@@ -59,7 +59,7 @@
     [imageView addSubview:self.versionLabel];
     
     UIButton *shareBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 200, 40)];
-    shareBtn.center = CGPointMake(XWIDTH/2, 370);
+    shareBtn.center = CGPointMake(XWIDTH/2, 410);
     shareBtn.backgroundColor = [UIColor orangeColor];
     shareBtn.layer.cornerRadius = 5.0f;
     [shareBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
