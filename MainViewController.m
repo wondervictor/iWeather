@@ -53,12 +53,20 @@
 @property (nonatomic, strong) NSMutableArray *cityWeatherDataList;
 // 可变数组存放realTimeView s
 @property (nonatomic, strong) NSMutableArray *realTimeViews;
+
+// 放置ScrollView中所有城市的天气信息
+@property (nonatomic, strong) NSMutableArray *allCityWeather;
 // 存放当前天气
 @property (nonatomic, strong) NSDictionary *currentWeatherData;
 // 存放当前一周天气
 @property (nonatomic, strong) NSArray *currentWeekWeatherList;
+// 当前天气序号.
+@property (nonatomic, assign) NSInteger currentSequence;
+
+
 //  CLLocation
 @property (nonatomic, strong) CLLocationManager *locationManager;
+
 @property (nonatomic, strong) NSString *locationCityName;
 
 // Controllers
@@ -77,6 +85,7 @@
    *  缓存.
  */
 
+static NSInteger counter = 0;
 
 @implementation MainViewController
 
@@ -91,6 +100,7 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = DEFAULT_COLOR;
+    self.allCityWeather = [[NSMutableArray alloc]init];
     self.cityListArray = [[NSMutableArray alloc]init];
     self.numberOfCities = [self getNumberOfCities];
     
@@ -107,7 +117,14 @@
 
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
-    [self.requestEngine startRequestWithCityName:@"宜都"];
+   
+    
+    for (NSString *name in self.cityListArray) {
+        NSLog(@"%@",name);
+        [self.requestEngine startRequestWithCityName:name];
+    }
+    
+    //[self.requestEngine startRequestWithCityName:@"宜都"];
     OneHUD *hud = [[OneHUD alloc]initWithFrame:CGRectMake(0, 0, 150, 150) withPointDiameter:16 interval:0.25];
     hud.center = self.view.center;
     hud.tag = 211;
@@ -160,6 +177,9 @@
     locationBtn.layer.masksToBounds = YES;
     [locationBtn addTarget:self action:@selector(locationButtonPress:) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:locationBtn];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedDataFromSearch:) name:@"GetNewCityNotification_2" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedDataFromAdd:) name:@"DidDeleteCityNotification" object:nil];
     
     self.searchViewController = [[SearchViewController alloc]init];
     self.addViewController = [[AddViewController alloc]init];
@@ -214,24 +234,29 @@
 
 - (void)loadCenterWeatherView:(NSDictionary *)weatherData {
    //   58 页崩溃数据报告
-    //NSLog(@"%@",self.currentWeatherData);
+    NSLog(@"%lu",counter);
     dispatch_async(dispatch_get_main_queue(), ^{
+        counter ++ ;
+       // NSLog(@"---%lu",counter);
+        [self.allCityWeather addObject:weatherData];   // 获取所有城市的天气信息
         
-    RealTimeWeather *realTime = [[RealTimeWeather alloc]init];
-    WeatherParse *parser = [WeatherParse sharedManager];
-    realTime = [parser parseRealTimeWeather:weatherData];
-    NSDictionary *dictForCondition = [parser parseForConditionView:weatherData];
-    self.currentWeekWeatherList = [parser getWeekWeatherArray:weatherData];
+        RealTimeWeather *realTime = [[RealTimeWeather alloc]init];
         
-        
-    RealTimeView *realTimeView = [[RealTimeView alloc]initWithFrame:CGRectMake(0, 0, XWIDTH,XHEIGHT-114 ) withRealTimeWeather:realTime withConditionData:dictForCondition];
-        
-    [self.weatherScrollView addSubview:realTimeView];
-        
-    //ConditionView *conditionView = [[ConditionView alloc]initWithFrame:CGRectMake(0, 3*(XHEIGHT-114)/4, XWIDTH, (XHEIGHT - 114)/4) withData:dictForCondition];
-   // [self.weatherScrollView addSubview:conditionView];
-    
+        WeatherParse *parser = [WeatherParse sharedManager];
+        realTime = [parser parseRealTimeWeather:weatherData];
+        NSLog(@"%@",realTime.cityName);
+        NSDictionary *dictForCondition = [parser parseForConditionView:weatherData];
+        //self.currentWeekWeatherList = [parser getWeekWeatherArray:weatherData];// 当前天气周信息
+        RealTimeView *realTimeView = [[RealTimeView alloc]initWithFrame:CGRectMake(XWIDTH*(counter-1), 0, XWIDTH,XHEIGHT-114 ) withRealTimeWeather:realTime withConditionData:dictForCondition];
+        realTimeView.tag = 500+counter;
+        [self.weatherScrollView addSubview:realTimeView];
+
     });
+   
+}
+
+- (NSInteger)numberOfCities {
+    return [self.cityListArray count];
 }
 
 - (NSInteger)getNumberOfCities {
@@ -240,8 +265,6 @@
         [self.cityListArray addObjectsFromArray:list];
     }
     NSLog(@"%@",[self cityListDataPath]);
-    list = @[@"北京",@"上海",@"武汉"];
-    [self.cityListArray addObjectsFromArray:list];
     NSInteger num = [self.cityListArray count];
     return num;
 }
@@ -251,20 +274,25 @@
     NSString *path = [paths objectAtIndex:0];
     return [path stringByAppendingPathComponent:@"citylist.plist"];
 }
-
+// Lazy Load
+- (NSInteger)currentSequence {
+    return self.weatherScrollView.contentOffset.x/XWIDTH;
+}
 
  
 #pragma  mark  UIScrollViewDelegate
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
- //  刷新
+    self.currentSequence = scrollView.contentOffset.x/[UIScreen mainScreen].bounds.size.width;
 }
 
 #pragma mark  TabBarDelegate
 
 - (void)subButton_0_Action {
 
+    //[self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
+    
     // [self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
    //  self.searchViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     [self presentViewController:self.searchViewController animated:YES completion:^{
@@ -274,6 +302,7 @@
 }
 
 - (void)subButton_1_Action {
+    self.addViewController.list = self.cityListArray;
     [self presentViewController:self.addViewController animated:YES completion:^{
         NSLog(@"add view controller");
     }];
@@ -294,6 +323,8 @@
 }
 //  TabBar Button_1_WeekTemp
 - (void)barButton_0_Touched:(BarButton *)sender {
+    WeatherParse *parser = [WeatherParse sharedManager];
+    self.currentWeekWeatherList = [parser getWeekWeatherArray:[self.allCityWeather objectAtIndex:self.currentSequence ] ];
     ARSPopover *popoverController = [ARSPopover new];
         popoverController.sourceView = sender;
     popoverController.sourceRect =CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
@@ -317,6 +348,7 @@
 }
 //  TabBar Button_2_PM2.5
 - (void)barButton_1_Touched:(BarButton *)sender {
+
     ARSPopover *popoverController = [ARSPopover new];
     popoverController.sourceView = sender;
     popoverController.sourceRect = CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
@@ -325,7 +357,7 @@
     [self presentViewController:popoverController animated:YES completion:^{
         [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
             WeatherParse *parser = [WeatherParse sharedManager];
-            NSDictionary *pm25Dictionary = [parser parseForPM25:self.currentWeatherData];
+            NSDictionary *pm25Dictionary = [parser parseForPM25:[self.allCityWeather objectAtIndex:self.currentSequence]];
             PMView *view = [[PMView alloc]initWithFrame:CGRectMake(10, 0, XWIDTH-30,180 ) withData:pm25Dictionary];
             [popover.view addSubview:view];
             
@@ -366,7 +398,7 @@
     [self presentViewController:popoverController animated:YES completion:^{
         [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
             WeatherParse *parser = [WeatherParse sharedManager];
-            LifeWeather *life = [parser parseLifeWeather:self.currentWeatherData];
+            LifeWeather *life = [parser parseLifeWeather:[self.allCityWeather objectAtIndex:self.currentSequence]];
             LifeView *view = [[LifeView alloc]initWithFrame:CGRectMake(10, 10, XWIDTH-30, 300) withData:life];
             [popover.view addSubview:view];
             
@@ -401,9 +433,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"网络连接故障" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];            UIAlertAction *refreshAction = [UIAlertAction actionWithTitle:@"刷新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-#warning refresh
-#warning 缓存
-                [self.requestEngine startRequestWithCityName:@""];
+                [self subButtonPress:nil];
             }];
             [alert addAction:cancelAction];
             [alert addAction:refreshAction];
@@ -562,7 +592,34 @@
 // Refresh
 #pragma  mark - subButtonDelegate 
 - (void)subButtonPress:(subButton *)button {
-    //[self.requestEngine startRequestWithCityName:@"宜都"];
+    counter = 0;
+    [self.allCityWeather removeAllObjects];     // 清空
+    for (NSInteger i=1;i<=[self.cityListArray count];i++) {
+        RealTimeView *view = [self.view viewWithTag:(500+i)];
+        NSLog(@"%@",[self.cityListArray objectAtIndex:i-1]);
+        [view removeFromSuperview];
+        [self.requestEngine startRequestWithCityName:[self.cityListArray objectAtIndex:i-1]];
+    }
+}
+
+//  handle Notifications
+
+- (void)receivedDataFromSearch:(NSNotification *)notification {
+    NSString *newName = (NSString *)notification.object;
+    [self.cityListArray addObject:newName];
+    NSLog(@"%@",newName);
+    for (NSString *name in self.cityListArray) {
+        NSLog(@"----- %@",name);
+    }
+    self.weatherScrollView.contentSize = CGSizeMake(XWIDTH*[self.cityListArray count], XHEIGHT -114);
+    [self subButtonPress:nil];
+}
+
+- (void)receivedDataFromAdd:(NSNotification *)notification {
+    NSString *name = (NSString *)notification.object;
+    [self.cityListArray removeObject:name];
+    self.weatherScrollView.contentSize = CGSizeMake(XWIDTH*[self.cityListArray count], XHEIGHT -114);
+    [self subButtonPress:nil];
 }
 
 #pragma mark - ARSPopoverDelegate

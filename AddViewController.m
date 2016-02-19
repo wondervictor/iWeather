@@ -45,9 +45,9 @@
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addItemsToArray:) name:@"GetNewCityNotification_1" object:nil];
     
-    NSArray *list = @[@"one",@"two",@"three"];
+    //NSArray *list = @[@"one",@"two",@"three"];
     self.cityList = [[NSMutableArray alloc]init];
-    [self.cityList addObjectsFromArray:list];
+    [self.cityList addObjectsFromArray:self.list];
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, WIDTH, HEIGHT-64) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

@@ -36,7 +36,7 @@
         pm10.textAlignment = NSTextAlignmentLeft;
         pm10.textColor = [UIColor orangeColor];
         pm10.text = [NSString stringWithFormat:@"PM10指数：%@",[dict valueForKey:@"pm10"]];
-        quality = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, 100, 40)];
+        quality = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, 150, 40)];
         quality.backgroundColor = [UIColor clearColor];
         quality.textAlignment = NSTextAlignmentLeft;
         quality.textColor = [UIColor blackColor];

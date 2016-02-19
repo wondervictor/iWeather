@@ -197,8 +197,7 @@
         [backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [backButton addTarget:self action:@selector(backButtonPress:) forControlEvents:UIControlEventTouchDown];
         backButton.layer.cornerRadius = 5.0f;
-        backButton.backgroundColor = [UIColor cyanColor];
-        [self.view addSubview:backButton];
+        backButton.backgroundColor = [UIColor orangeColor];
         
         self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0,0,0,0)];
         //(0, 64, XWIDTH, XHEIGHT-64)];
@@ -234,6 +233,8 @@
 
         } completion:^(BOOL finished) {
             NSLog(@"OK");
+            [self.view addSubview:backButton];
+
         }];
         
         

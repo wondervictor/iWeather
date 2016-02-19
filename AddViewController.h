@@ -10,4 +10,6 @@
 
 @interface AddViewController : UIViewController
 
+@property (nonatomic, strong) NSArray *list;
+
 @end
