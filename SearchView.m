@@ -33,6 +33,7 @@
     UIImageView *imageView;
     UILabel *weatherLabel;
     UILabel *airLabel;
+    UILabel *windLabel;
 
 }
 
@@ -46,6 +47,7 @@
 
 - (id)initWithFrame:(CGRect)frame withData:(NSDictionary *)dict {
     if (self = [super initWithFrame:frame]) {
+        //self.backgroundColor = [UIColor colorWithRed:53/255.0 green:218/255.0 blue:244/255.0 alpha:1];
         if (DEVICE_WIDTH == 320) {
             _proportion = 1.0;
         }
@@ -56,8 +58,9 @@
             _proportion = 414/320.0;
         }
         
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 350) style:UITableViewStylePlain ];
-        self.tableView.center = CGPointMake(WIDTH/2.0,40 + 160*_proportion + 175.0 );
+        
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 280) style:UITableViewStylePlain ];
+        self.tableView.center = CGPointMake(WIDTH/2.0,30+170*_proportion + 140.0);
 
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.tableView.backgroundColor = [UIColor clearColor];
@@ -76,77 +79,74 @@
 }
 
 - (void)configureViews:(NSDictionary *)dict withProportion:(CGFloat)proportion {
-    NSLog(@"%@",dict);
+    
+    UIView *container = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, 170*proportion)];
+    
+    container.backgroundColor = [UIColor colorWithRed:53/255.0 green:218/255.0 blue:244/255.0 alpha:1];
+    container.layer.cornerRadius = 5.0f;
+    
     RealTimeWeather *realTime = [[RealTimeWeather alloc]init];
     realTime = [dict valueForKey:@"realtime"];
     NSLog(@"%@",realTime.cityName);
-    cityName = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(10, 10, 70, 40) withProportion:proportion] ];
-    cityName.backgroundColor = [UIColor clearColor];
-    cityName.textAlignment = NSTextAlignmentLeft;
-    cityName.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:24.0];
-    cityName.textColor = [UIColor whiteColor];
-    //cityName.text = @"宜昌" ;
-    cityName.text = realTime.cityName;
-    self.city = realTime.cityName;
-    [self addSubview:cityName];       //  addSubView
     
-    self.addBtn = [[UIButton alloc]initWithFrame:[self CGRectMake:CGRectMake(WIDTH - 70,10, 40, 40) withProportion:proportion] ];
-    self.addBtn.layer.cornerRadius = 20.0*proportion ;
-    self.addBtn.layer.masksToBounds = YES;
-    [self.addBtn setImage:[UIImage imageNamed:@"add"] forState:UIControlStateNormal];
-    [self.addBtn addTarget:self action:@selector(addBtnClick) forControlEvents:UIControlEventTouchDown];   //  touchUpInside   touchDown
-    [self addSubview:self.addBtn];  //  addSubView
-    
-    dateLabel = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(10, 40*proportion+20,200, 40) withProportion:proportion] ];
-    dateLabel.backgroundColor = [UIColor clearColor];
-    dateLabel.textAlignment = NSTextAlignmentLeft;
-    dateLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:22.0];
-    dateLabel.textColor = [UIColor whiteColor];
-    dateLabel.text = [NSString stringWithFormat:@"日期：%@",realTime.date];
-    [self addSubview:dateLabel];      //  addSubView
-    
-    tempLabel = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(10, 30+80*proportion, 80, 80) withProportion:proportion]];
+    tempLabel = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(20,10, 100, 80) withProportion:proportion]];
     tempLabel.textAlignment = NSTextAlignmentCenter;
     tempLabel.textColor = [UIColor whiteColor];
-    tempLabel.font = [UIFont fontWithName:@"Helvetica" size:40.0];
+    tempLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:75.0];
+    tempLabel.adjustsFontSizeToFitWidth = YES;
     tempLabel.backgroundColor = [UIColor clearColor];
     tempLabel.text = realTime.weatherTemp;
     tempLabel.text = realTime.weatherTemp;
-    [self addSubview:tempLabel];       //  addSubView
+    [container addSubview:tempLabel];       //  addSubView
+
+    cityName = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(20, 120*proportion+10, 80, 40) withProportion:proportion] ];
+    cityName.backgroundColor = [UIColor clearColor];
+    cityName.textAlignment = NSTextAlignmentCenter;
+    cityName.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
+    cityName.textColor = [UIColor blackColor];
+    cityName.text = realTime.cityName;
+    self.city = realTime.cityName;
+    [container addSubview:cityName];
     
-    imageView = [[UIImageView alloc]initWithFrame:[self CGRectMake:CGRectMake(15+80*proportion,30 + 80*proportion , 40, 40) withProportion:proportion] ];
+    imageView = [[UIImageView alloc]initWithFrame:[self CGRectMake:CGRectMake(WIDTH-100*proportion -40,20,100,100) withProportion:proportion] ];
     imageView.image = [self configureImage:realTime.img];
-    [self addSubview:imageView];      //  addSubView
+    [container addSubview:imageView];      //  addSubView
     
-    weatherLabel = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(15+120*proportion, 30 + 80*proportion, 80, 40) withProportion:proportion]];
+    weatherLabel = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(20,80*proportion + 10, 80, 40) withProportion:proportion]];
     weatherLabel.textColor = [UIColor whiteColor];
     weatherLabel.textAlignment = NSTextAlignmentCenter;
     weatherLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:24.0];
     weatherLabel.backgroundColor = [UIColor clearColor];
     weatherLabel.text = realTime.weatherCondition;
-    [self addSubview:weatherLabel];       //  addSubView
-    
+    [container addSubview:weatherLabel];       //  addSubView
     
     LifeWeather *life = [dict valueForKey:@"life"];
     NSString *air = [life.pollution objectAtIndex:0];
-    airLabel = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(15+80*proportion, 30+120*proportion, 120, 40) withProportion:proportion]];
-    airLabel.textAlignment = NSTextAlignmentLeft;
-    airLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:22.0];
+    airLabel = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(WIDTH-120*proportion-10,80*proportion + 30, 120, 30) withProportion:proportion]];
+    airLabel.textAlignment = NSTextAlignmentRight;
+    airLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15.0];
     airLabel.backgroundColor = [UIColor clearColor];
-    airLabel.textColor = [UIColor whiteColor];
+    airLabel.textColor = [UIColor grayColor];
     airLabel.text = [NSString stringWithFormat:@"空气质量： %@",air];
-    [self addSubview:airLabel];      //   addSubView
+    [container addSubview:airLabel];      //   addSubView
     
+    windLabel = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(WIDTH-120*proportion-10, 110*proportion + 30, 120, 30) withProportion:proportion] ];
+    windLabel.textAlignment = NSTextAlignmentRight;
+    windLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15.0];
+    windLabel.backgroundColor = [UIColor clearColor];
+    windLabel.textColor = [UIColor grayColor];
     
+    windLabel.text = [NSString stringWithFormat:@"%@,%@",[realTime.windCondition objectForKey:@"power" ],[realTime.windCondition objectForKey:@"direct"]];
+    [container addSubview:windLabel];
     
+    [self addSubview:container];
+    
+
     
     
 }
 
-- (void)addBtnClick {
-    [_delegate addNewCity:self.city];
-}
-
+ 
 - (void)configureLabels:(UILabel *)label {
     
     [self addSubview:label];
@@ -163,8 +163,9 @@
     
     WeekWeather *weather = [self.listWeekWeather objectAtIndex:indexPath.row];
     NSArray *day = weather.dayWeather;
-    cell.backgroundColor = [UIColor colorWithWhite:1 alpha:0.2];
-    cell.date.text = weather.date;   //  在iPhone4s上模拟有点问题。
+    cell.backgroundColor = [UIColor clearColor];
+    cell.date.text = weather.date;//  在iPhone4s上模拟有点问题。
+    cell.date.textColor = [UIColor grayColor];
     cell.image.image = [self configureImage:[day objectAtIndex:0]];
     cell.temp.text = [NSString stringWithFormat:@"%@°",[day objectAtIndex:2]];
     cell.temp.textColor = [UIColor orangeColor];
@@ -179,7 +180,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 50.0f;
+    return 40.0f;
 }
 
 - (UIImage *)configureImage:(NSString *)imageNum
@@ -188,7 +189,7 @@
     NSString *filePath = [[NSBundle mainBundle]pathForResource:@"ImageList" ofType:@"plist"];
     NSArray *listImage = [[NSArray alloc]initWithContentsOfFile:filePath];
     NSDictionary *dict = [listImage objectAtIndex:row];
-    UIImage *image = [UIImage imageNamed:[dict valueForKey:@"img"]];
+    UIImage *image = [UIImage imageNamed:[dict valueForKey:@"Img"]];
     return image;
 }
 

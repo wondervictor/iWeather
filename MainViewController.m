@@ -17,7 +17,6 @@
 #import "RealTimeView.h"
 #import "RealTimeWeather.h"
 #import "TabBar.h"
-#import "ConditionView.h"
 #import "weekViewCell.h"
 #import "PMView.h"
 #import "LifeView.h"
@@ -204,8 +203,7 @@ static NSInteger counter = 0;
 
 - (NSString *)notificationString {
     if (_notificationString == nil) {
-        _notificationString = @"hello";
-//#warning Notification  有网络
+        _notificationString = @"iWeather邀请你查看今日天气";
     }
     return _notificationString;
 }
@@ -268,21 +266,9 @@ static NSInteger counter = 0;
 
 - (void)writeDataToFile {
 
-    NSLog(@"%@",[self cityWeatherDataPath]);
-   
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.allCityWeather];
+    [data writeToFile:[self cityWeatherDataPath] atomically:YES];
     
-    
-    BOOL exi =[data writeToFile:[self cityWeatherDataPath] atomically:YES];
-    
-    if (exi == YES) {
-        NSLog(@"写入成功");
-    }
-    else if ( exi == NO) {
-        NSLog(@"写入失败");
-    }
-
-
 }
 
 // Lazy Load
@@ -674,6 +660,11 @@ static NSInteger counter = 0;
 
 - (void)receivedDataFromSearch:(NSNotification *)notification {
     NSString *newName = (NSString *)notification.object;
+    for (NSString * name  in self.cityListArray) {
+        if ([newName isEqualToString:name]) {
+            return;
+        }
+    }
     [self.cityListArray addObject:newName];
     self.weatherScrollView.contentSize = CGSizeMake(XWIDTH*[self.cityListArray count], XHEIGHT -114);
     [self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];

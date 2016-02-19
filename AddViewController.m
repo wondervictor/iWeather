@@ -58,7 +58,7 @@
     self.searchViewController = [[SearchViewController alloc]init];
     UIButton *cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake(0,0,200 , 50)];
     cancelBtn.center = CGPointMake(WIDTH/2, HEIGHT-25);
-    cancelBtn.backgroundColor = [UIColor cyanColor];
+    cancelBtn.backgroundColor = [UIColor orangeColor];
     [cancelBtn setTitle:@"Cancel" forState:UIControlStateNormal];
     cancelBtn.layer.cornerRadius = 25.0f;
     [cancelBtn addTarget:self action:@selector(cancelButtonClick:) forControlEvents:UIControlEventTouchUpInside];

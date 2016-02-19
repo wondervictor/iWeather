@@ -41,7 +41,6 @@
 		2EB229741C6F12C1003E64B3 /* UIButton+UIImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229731C6F12C1003E64B3 /* UIButton+UIImage.m */; };
 		2EB229781C6F4B68003E64B3 /* OneNetWork.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229771C6F4B68003E64B3 /* OneNetWork.m */; };
 		2EB229C01C7022AC003E64B3 /* WeatherRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229BF1C7022AC003E64B3 /* WeatherRequest.m */; };
-		2EB229C31C704583003E64B3 /* ConditionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB229C21C704583003E64B3 /* ConditionView.m */; };
 		2EB22A461C71D672003E64B3 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB22A451C71D672003E64B3 /* SearchViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -139,8 +138,6 @@
 		2EB229771C6F4B68003E64B3 /* OneNetWork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneNetWork.m; sourceTree = "<group>"; };
 		2EB229BE1C7022AC003E64B3 /* WeatherRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeatherRequest.h; path = iWeather/WeatherRequest.h; sourceTree = "<group>"; };
 		2EB229BF1C7022AC003E64B3 /* WeatherRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeatherRequest.m; path = iWeather/WeatherRequest.m; sourceTree = "<group>"; };
-		2EB229C11C704583003E64B3 /* ConditionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConditionView.h; sourceTree = "<group>"; };
-		2EB229C21C704583003E64B3 /* ConditionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConditionView.m; sourceTree = "<group>"; };
 		2EB229CA1C707A4C003E64B3 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		2EB22A441C71D672003E64B3 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		2EB22A451C71D672003E64B3 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
@@ -335,8 +332,6 @@
 			children = (
 				2EB2295E1C6B2E46003E64B3 /* RealTimeView.h */,
 				2EB2295F1C6B2E46003E64B3 /* RealTimeView.m */,
-				2EB229C11C704583003E64B3 /* ConditionView.h */,
-				2EB229C21C704583003E64B3 /* ConditionView.m */,
 				2E216A531C756A150034AE55 /* PMView.h */,
 				2E216A541C756A150034AE55 /* PMView.m */,
 				2E216A561C756A210034AE55 /* LifeView.h */,
@@ -540,7 +535,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EB229781C6F4B68003E64B3 /* OneNetWork.m in Sources */,
-				2EB229C31C704583003E64B3 /* ConditionView.m in Sources */,
 				2EB229651C6B7456003E64B3 /* TabBar.m in Sources */,
 				2EB229C01C7022AC003E64B3 /* WeatherRequest.m in Sources */,
 				2E216A331C7407640034AE55 /* SearchView.m in Sources */,

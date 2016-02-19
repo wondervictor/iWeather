@@ -23,7 +23,7 @@
 //  Controller
 #import "SearchViewController.h"
 
-@interface SearchViewController ()<WeatherRequestDelegate,UISearchBarDelegate,UIScrollViewDelegate,SearchViewDelegate>
+@interface SearchViewController ()<WeatherRequestDelegate,UISearchBarDelegate,UIScrollViewDelegate>
 
 //  滑动手势
 @property (nonatomic, strong) UISwipeGestureRecognizer *swipeGestureRecognizer;
@@ -35,6 +35,9 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 
 @property (nonatomic, strong) UINavigationBar *navigationBar;
+
+@property (nonatomic, strong) NSString *searchName;
+
 @end
 
 @implementation SearchViewController
@@ -82,7 +85,7 @@
     
     UIButton *cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake(0,0,200 , 50)];
     cancelBtn.center = CGPointMake(XWIDTH/2, XHEIGHT-25);
-    cancelBtn.backgroundColor = [UIColor cyanColor];
+    cancelBtn.backgroundColor = [UIColor orangeColor];
     [cancelBtn setTitle:@"Cancel" forState:UIControlStateNormal];
     cancelBtn.layer.cornerRadius = 25.0f;
     [cancelBtn addTarget:self action:@selector(cancelButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -149,6 +152,7 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
+    self.searchName = searchBar.text;
     [self.requestEngine startRequestWithCityName:searchBar.text];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
@@ -193,15 +197,24 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        UIButton *backButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 30, 50, 30)];
+        UIButton *backButton = [[UIButton alloc]initWithFrame:CGRectMake(-60, 30, 50, 30)];
         [backButton setTitle:@"返回" forState:UIControlStateNormal];
-        [backButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [backButton setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
         [backButton addTarget:self action:@selector(backButtonPress:) forControlEvents:UIControlEventTouchDown];
-        backButton.layer.cornerRadius = 5.0f;
-        backButton.backgroundColor = [UIColor orangeColor];
+        backButton.tag = 211;
+        backButton.backgroundColor = [UIColor clearColor];
+        
+        UIButton *addButton = [[UIButton alloc]initWithFrame:CGRectMake(XWIDTH+60, 30, 30, 30) ];
+        [addButton setImage:[UIImage imageNamed:@"add"] forState:UIControlStateNormal];
+        [addButton addTarget:self action:@selector(addButtonPress:) forControlEvents:UIControlEventTouchDown];
+        addButton.tag = 212;
+        addButton.layer.cornerRadius = 15.0f;
+        addButton.layer.masksToBounds = YES;
+        
+        [self.view addSubview:backButton];
+        [self.view addSubview:addButton];
         
         self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0,0,0,0)];
-        //(0, 64, XWIDTH, XHEIGHT-64)];
         self.scrollView.tag = 101;
         self.scrollView.backgroundColor = DEFAULT_COLOR;
         self.scrollView.delegate = self;
@@ -217,6 +230,7 @@
         WeatherParse *paser = [WeatherParse sharedManager];
         RealTimeWeather *realTimeWeather = [paser parseRealTimeWeather:data];
        // NSLog(@"%@",realTimeWeather.cityName);
+        self.searchName = realTimeWeather.cityName;
         LifeWeather *lifeWeather = [paser parseLifeWeather:data];
         NSArray *listWeather = [paser getWeekWeatherArray:data];
         NSDictionary *pm25 = [paser parseForPM25:data];
@@ -227,14 +241,15 @@
         [dict setObject:pm25 forKey:@"pm25"];
         SearchView *view = [[SearchView alloc]initWithFrame:CGRectMake(0, 0,XWIDTH , 700) withData:dict];
         [self.scrollView addSubview:view];
-        view.delegate = self;
         [UIView animateWithDuration:0.4f animations:^{
             self.scrollView.frame = CGRectMake(0, 0, XWIDTH, XHEIGHT-64);
             self.scrollView.center = CGPointMake(XWIDTH/2, (XHEIGHT+64)/2);
-
+            backButton.frame = CGRectMake(10, 30, 50, 30);
+            addButton.frame = CGRectMake(XWIDTH-50, 30, 30, 30);
+            
         } completion:^(BOOL finished) {
-            NSLog(@"OK");
             [self.view addSubview:backButton];
+            
 
         }];
         
@@ -250,10 +265,17 @@
         CGRect rect = CGRectMake(0, 0, 0, 0);
         self.scrollView.frame = rect;
         self.scrollView.center = CGPointMake(XWIDTH/2, (XHEIGHT+64)/2);
-        
+        UIButton *button_1 = [self.view viewWithTag:211];
+        UIButton *button_2 = [self.view viewWithTag:212];
+        button_1.frame = CGRectMake(-60, 30, 50, 30);
+        button_2.frame = CGRectMake(XWIDTH+60, 30, 30, 30);
     } completion:^(BOOL finished) {
         [[[self.scrollView subviews] lastObject]removeFromSuperview];
         [self.scrollView removeFromSuperview];
+        UIButton *button_1 = [self.view viewWithTag:211];
+        UIButton *button_2 = [self.view viewWithTag:212];
+        [button_1 removeFromSuperview];
+        [button_2 removeFromSuperview];
     }];
     
     
@@ -261,13 +283,14 @@
 
 #pragma mark - SearchViewDelegate
 
-- (void)addNewCity:(NSString *)cityName {
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"GetNewCityNotification_1" object:cityName userInfo:nil];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"GetNewCityNotification_2" object:cityName userInfo:nil];
-    [self dismissViewControllerAnimated:YES completion:^{}];
-    
-}
 
+
+- (void)addButtonPress:(UIButton *)sender {
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"GetNewCityNotification_1" object:self.searchName userInfo:nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"GetNewCityNotification_2" object:self.searchName userInfo:nil];
+    [self dismissViewControllerAnimated:YES completion:^{}];
+
+}
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
@@ -278,7 +301,11 @@
      UIScrollView *view = [self.view viewWithTag:101];
     [[view.subviews lastObject]removeFromSuperview];
     [view removeFromSuperview];
-    
+    UIButton *button_1 = [self.view viewWithTag:211];
+    UIButton *button_2 = [self.view viewWithTag:212];
+    [button_1 removeFromSuperview];
+    [button_2 removeFromSuperview];
+
 }
 
 - (void)didReceiveMemoryWarning {

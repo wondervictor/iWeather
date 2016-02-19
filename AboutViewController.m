@@ -34,7 +34,7 @@
     
     UIButton *cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake(0,0,200 , 50)];
     cancelBtn.center = CGPointMake(XWIDTH/2, XHEIGHT-25);
-    cancelBtn.backgroundColor = [UIColor cyanColor];
+    cancelBtn.backgroundColor = [UIColor orangeColor];
     [cancelBtn setTitle:@"Cancel" forState:UIControlStateNormal];
     cancelBtn.layer.cornerRadius = 25.0f;
     [cancelBtn addTarget:self action:@selector(cancelButtonClick:) forControlEvents:UIControlEventTouchUpInside];
