@@ -218,7 +218,7 @@
         self.scrollView.tag = 101;
         self.scrollView.backgroundColor = DEFAULT_COLOR;
         self.scrollView.delegate = self;
-        self.scrollView.contentSize = CGSizeMake(XWIDTH, 700);
+        self.scrollView.contentSize = CGSizeMake(XWIDTH, 900);
         self.scrollView.pagingEnabled = YES;
         self.scrollView.showsVerticalScrollIndicator = NO;
         self.swipeGestureRecognizer  = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipe:)];
@@ -235,10 +235,12 @@
         NSArray *listWeather = [paser getWeekWeatherArray:data];
         NSDictionary *pm25 = [paser parseForPM25:data];
         NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithCapacity:4];
+        NSDictionary *condition = [paser parseForConditionView:data];
         [dict setObject:realTimeWeather forKey:@"realtime"];
         [dict setObject:lifeWeather forKey:@"life"];
         [dict setObject:listWeather forKey:@"week"];
         [dict setObject:pm25 forKey:@"pm25"];
+        [dict setObject:condition forKey:@"condition"];
         SearchView *view = [[SearchView alloc]initWithFrame:CGRectMake(0, 0,XWIDTH , 700) withData:dict];
         [self.scrollView addSubview:view];
         [UIView animateWithDuration:0.4f animations:^{

@@ -24,9 +24,12 @@
 //  View
 #import "weekViewCell.h"
 #import "SearchView.h"
+#import "PMView.h"
+#import "LifeView.h"
 
 @interface SearchView()<UITableViewDataSource,UITableViewDelegate>
 {
+    // Part1
     UILabel *cityName;
     UILabel *dateLabel;
     UILabel *tempLabel;
@@ -34,7 +37,15 @@
     UILabel *weatherLabel;
     UILabel *airLabel;
     UILabel *windLabel;
-
+    
+    // Part2
+    UILabel *infoLabel;  // 标题显示
+    UILabel *sunriseLabel;
+    UILabel *sunsetLabel;
+    UILabel *uvrayLabel;
+    UILabel *humidtyLabel;
+    
+    
 }
 
 @property (nonatomic, strong) NSArray *listWeekWeather;
@@ -87,7 +98,6 @@
     
     RealTimeWeather *realTime = [[RealTimeWeather alloc]init];
     realTime = [dict valueForKey:@"realtime"];
-    NSLog(@"%@",realTime.cityName);
     
     tempLabel = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(20,10, 100, 80) withProportion:proportion]];
     tempLabel.textAlignment = NSTextAlignmentCenter;
@@ -141,8 +151,59 @@
     
     [self addSubview:container];
     
-
     
+    UIView *infoView = [[UIView alloc]initWithFrame:CGRectMake(0, 310+170*proportion, WIDTH, 70+40*proportion) ];
+    infoView.backgroundColor = [UIColor colorWithRed:74/255.0 green:74/255.0 blue:74/255.0 alpha:0.9];
+    infoView.layer.cornerRadius = 5.0f;
+    infoLabel = [[UILabel alloc]initWithFrame:[self CGRectMake:CGRectMake(WIDTH/2-60, 0, 120, 40) withProportion:proportion] ];
+    infoLabel.textAlignment = NSTextAlignmentCenter;
+    infoLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:20.0];
+    infoLabel.backgroundColor = [UIColor clearColor];
+    infoLabel.text = @"天气信息";
+    infoLabel.textColor = [UIColor orangeColor];
+    [infoView addSubview:infoLabel];
+    NSDictionary *condition = [dict valueForKey:@"condition"];
+    
+    sunriseLabel = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH/2-160,40*proportion ,150 , 30) ];
+    sunriseLabel.textAlignment = NSTextAlignmentRight;
+    sunriseLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0];
+    sunriseLabel.backgroundColor = [UIColor clearColor];
+    sunriseLabel.textColor = [UIColor whiteColor];
+    sunriseLabel.text = [NSString stringWithFormat:@"日出：%@",[condition valueForKey:@"sunrise"]];
+    [infoView addSubview:sunriseLabel];
+    
+    sunsetLabel = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH/2+10, 40*proportion, 150, 30)];
+    sunsetLabel.textAlignment = NSTextAlignmentLeft;
+    sunsetLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0];
+    sunsetLabel.backgroundColor = [UIColor clearColor];
+    sunsetLabel.textColor = [UIColor whiteColor];
+    sunsetLabel.text = [NSString stringWithFormat:@"日落：%@",[condition valueForKey:@"sunset"]];
+    [infoView addSubview:sunsetLabel];
+    
+    humidtyLabel = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH/2-160, 40*proportion+30, 150, 30) ];
+    humidtyLabel.textAlignment = NSTextAlignmentRight;
+    humidtyLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0];
+    humidtyLabel.backgroundColor = [UIColor clearColor];
+    humidtyLabel.textColor = [UIColor whiteColor];
+    humidtyLabel.text = [NSString stringWithFormat:@"湿度：%@", [condition valueForKey:@"humidty"]];
+    [infoView addSubview:humidtyLabel];
+    
+    
+    uvrayLabel = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH/2+10, 40*proportion+30, 150, 30)];
+    uvrayLabel.textAlignment = NSTextAlignmentLeft;
+    uvrayLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:15.0];
+    uvrayLabel.backgroundColor = [UIColor clearColor];
+    uvrayLabel.textColor = [UIColor whiteColor];
+    uvrayLabel.text = [NSString stringWithFormat:@"紫外线：%@",[condition valueForKey:@"uvray"]];
+    [infoView addSubview:uvrayLabel];
+    
+    [self addSubview:infoView];
+    
+    
+    PMView *pmView = [[PMView alloc]initWithFrame:CGRectMake(0,380+210*proportion ,WIDTH ,180 ) withData:[dict valueForKey:@"pm25"]];
+    pmView.layer.cornerRadius = 5.0f;
+    pmView.backgroundColor = [UIColor whiteColor];
+    [self addSubview:pmView];
     
 }
 
