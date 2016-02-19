@@ -211,22 +211,6 @@ static NSInteger counter = 0;
 }
 
 
-- (void)reloadView {
-    
-}
-
-- (void)refreshData {
-#warning refresh
-    /*
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    for (NSString *name in self.cityListArray) {
-        [self.requestEngine startRequestWithCityName:name];
-    }
-     */
-    
-}
-
-
 - (void)locationButtonPress:(UIButton *)sender {
     [self.locationManager startUpdatingLocation];
     // 定位Button
@@ -465,21 +449,66 @@ static NSInteger counter = 0;
         if (placemarks.count > 0) {
 
             CLPlacemark *placeMark = [placemarks objectAtIndex:0];
-            self.locationCityName = placeMark.locality;
-            NSLog(@"%@",placeMark.locality);
-            NSLog(@"%@",placeMark.subLocality);
-
+            __block NSString *city = placeMark.locality;
+            if (!city) {
+                city = placeMark.administrativeArea;
+            }
+            
             if (!placeMark) {
                //  error;
             }
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 dispatch_async(dispatch_get_main_queue(), ^{
-                
+                    self.locationCityName = city;
+                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                        [self dismissViewControllerAnimated:YES completion:nil];
+                    }];
+                    for (NSString *name in self.cityListArray) {
+                        if ([name isEqualToString:city]) {
+                            //  如果已经添加该城市
+                            NSString *message = @"您已经添加该城市";
+                            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"定位信息" message:message preferredStyle:UIAlertControllerStyleAlert];
+                            [alert addAction:cancelAction];
+                            [self presentViewController:alert animated:YES completion:^{
+                                [self.locationManager stopUpdatingLocation];
+                                
+                            }];
+                            return ;
+
+                        }
+                    }
+                    NSString *message = [NSString stringWithFormat:@"使用此城市：%@",city ];
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"定位信息" message:message preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        
+                        [self.cityListArray addObject:self.locationCityName];
+                        NSLog(@"%@",self.locationCityName);
+                        self.weatherScrollView.contentSize = CGSizeMake(XWIDTH*[self.cityListArray count], XHEIGHT -114);
+                        [self subButtonPress:nil];
+                    }];
+                    
+                    [alert addAction:confirmAction];
+                    [alert addAction:cancelAction];
+                    [self presentViewController:alert animated:YES completion:^{
+                        [self.locationManager stopUpdatingLocation];
+
+                    }];
+                     
+                    
                 });
             });
         }
         else if (error) {
-            NSLog(@"Location error: %@",error);
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"定位信息" message:@"无法获取定位" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [alert dismissViewControllerAnimated:YES completion:nil];
+            
+            }];
+            [alert addAction:cancelAction];
+            [self presentViewController:alert animated:YES completion:^{
+                [self.locationManager stopUpdatingLocation];
+
+            }];
         }
         
     }];
@@ -488,7 +517,16 @@ static NSInteger counter = 0;
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    NSLog(@"error: %@",error);
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"定位信息" message:@"无法获取定位" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+        
+    }];
+    [alert addAction:cancelAction];
+    [self presentViewController:alert animated:YES completion:^{
+        [self.locationManager stopUpdatingLocation];
+
+    }];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
@@ -607,11 +645,8 @@ static NSInteger counter = 0;
 - (void)receivedDataFromSearch:(NSNotification *)notification {
     NSString *newName = (NSString *)notification.object;
     [self.cityListArray addObject:newName];
-    NSLog(@"%@",newName);
-    for (NSString *name in self.cityListArray) {
-        NSLog(@"----- %@",name);
-    }
     self.weatherScrollView.contentSize = CGSizeMake(XWIDTH*[self.cityListArray count], XHEIGHT -114);
+    //[self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
     [self subButtonPress:nil];
 }
 
@@ -619,6 +654,7 @@ static NSInteger counter = 0;
     NSString *name = (NSString *)notification.object;
     [self.cityListArray removeObject:name];
     self.weatherScrollView.contentSize = CGSizeMake(XWIDTH*[self.cityListArray count], XHEIGHT -114);
+    //[self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
     [self subButtonPress:nil];
 }
 
