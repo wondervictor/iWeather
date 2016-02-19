@@ -190,7 +190,6 @@ static NSInteger counter = 0;
     if (weatherNotification != nil) {
         weatherNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:0];
         weatherNotification.repeatInterval = kCFCalendarUnitDay;
-        weatherNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:10.0f];
         weatherNotification.alertBody = self.notificationString;
         weatherNotification.timeZone = [NSTimeZone defaultTimeZone];
         weatherNotification.alertTitle = @"今日天气";
@@ -199,13 +198,14 @@ static NSInteger counter = 0;
         weatherNotification.alertAction = @"查看";
     }
     [[UIApplication sharedApplication]scheduleLocalNotification:weatherNotification];
+    [self performSelector:@selector(writeDataToFile) withObject:nil afterDelay:5];
     
 }
 
 - (NSString *)notificationString {
     if (_notificationString == nil) {
         _notificationString = @"hello";
-#warning Notification  有网络
+//#warning Notification  有网络
     }
     return _notificationString;
 }
@@ -218,19 +218,15 @@ static NSInteger counter = 0;
 
 - (void)loadCenterWeatherView:(NSDictionary *)weatherData {
    //   58 页崩溃数据报告
-    NSLog(@"%lu",counter);
     dispatch_async(dispatch_get_main_queue(), ^{
         counter ++ ;
        // NSLog(@"---%lu",counter);
         [self.allCityWeather addObject:weatherData];   // 获取所有城市的天气信息
-        
         RealTimeWeather *realTime = [[RealTimeWeather alloc]init];
-        
+        [self.allCityWeather writeToFile:[self cityWeatherDataPath] atomically:YES];
         WeatherParse *parser = [WeatherParse sharedManager];
         realTime = [parser parseRealTimeWeather:weatherData];
-        NSLog(@"%@",realTime.cityName);
         NSDictionary *dictForCondition = [parser parseForConditionView:weatherData];
-        //self.currentWeekWeatherList = [parser getWeekWeatherArray:weatherData];// 当前天气周信息
         RealTimeView *realTimeView = [[RealTimeView alloc]initWithFrame:CGRectMake(XWIDTH*(counter-1), 0, XWIDTH,XHEIGHT-114 ) withRealTimeWeather:realTime withConditionData:dictForCondition];
         realTimeView.tag = 500+counter;
         [self.weatherScrollView addSubview:realTimeView];
@@ -248,7 +244,12 @@ static NSInteger counter = 0;
     if (list != nil) {
         [self.cityListArray addObjectsFromArray:list];
     }
-    NSLog(@"%@",[self cityListDataPath]);
+    else if (list == nil) {
+        [self.cityListArray addObjectsFromArray:@[@"北京",@"上海"]];
+        [self.cityListArray writeToFile:[self cityListDataPath] atomically:YES
+         ];
+    }
+
     NSInteger num = [self.cityListArray count];
     return num;
 }
@@ -258,6 +259,32 @@ static NSInteger counter = 0;
     NSString *path = [paths objectAtIndex:0];
     return [path stringByAppendingPathComponent:@"citylist.plist"];
 }
+
+- (NSString *)cityWeatherDataPath {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];
+    return [path stringByAppendingPathComponent:@"cache.plist"];
+}
+
+- (void)writeDataToFile {
+
+    NSLog(@"%@",[self cityWeatherDataPath]);
+   
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.allCityWeather];
+    
+    
+    BOOL exi =[data writeToFile:[self cityWeatherDataPath] atomically:YES];
+    
+    if (exi == YES) {
+        NSLog(@"写入成功");
+    }
+    else if ( exi == NO) {
+        NSLog(@"写入失败");
+    }
+
+
+}
+
 // Lazy Load
 - (NSInteger)currentSequence {
     return self.weatherScrollView.contentOffset.x/XWIDTH;
@@ -275,10 +302,6 @@ static NSInteger counter = 0;
 
 - (void)subButton_0_Action {
 
-    //[self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
-    
-    // [self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
-   //  self.searchViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     [self presentViewController:self.searchViewController animated:YES completion:^{
         NSLog(@"search view controller");
     }];
@@ -416,7 +439,15 @@ static NSInteger counter = 0;
         sleep(1);
         dispatch_async(dispatch_get_main_queue(), ^{
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"网络连接故障" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];            UIAlertAction *refreshAction = [UIAlertAction actionWithTitle:@"刷新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSData *data = [[NSData alloc]initWithContentsOfFile:[self cityWeatherDataPath] ];
+                NSArray *tempArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+                for (NSDictionary *dict in tempArray) {
+                    NSLog(@"%@",dict);
+                    [self loadCenterWeatherView:dict];
+                }
+            }];
+            UIAlertAction *refreshAction = [UIAlertAction actionWithTitle:@"刷新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self subButtonPress:nil];
             }];
             [alert addAction:cancelAction];
@@ -482,7 +513,6 @@ static NSInteger counter = 0;
                     UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         
                         [self.cityListArray addObject:self.locationCityName];
-                        NSLog(@"%@",self.locationCityName);
                         self.weatherScrollView.contentSize = CGSizeMake(XWIDTH*[self.cityListArray count], XHEIGHT -114);
                         [self subButtonPress:nil];
                     }];
@@ -493,7 +523,7 @@ static NSInteger counter = 0;
                         [self.locationManager stopUpdatingLocation];
 
                     }];
-                     
+                    
                     
                 });
             });
@@ -646,7 +676,7 @@ static NSInteger counter = 0;
     NSString *newName = (NSString *)notification.object;
     [self.cityListArray addObject:newName];
     self.weatherScrollView.contentSize = CGSizeMake(XWIDTH*[self.cityListArray count], XHEIGHT -114);
-    //[self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
+    [self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
     [self subButtonPress:nil];
 }
 
@@ -654,7 +684,7 @@ static NSInteger counter = 0;
     NSString *name = (NSString *)notification.object;
     [self.cityListArray removeObject:name];
     self.weatherScrollView.contentSize = CGSizeMake(XWIDTH*[self.cityListArray count], XHEIGHT -114);
-    //[self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
+    [self.cityListArray writeToFile:[self cityListDataPath] atomically:YES];
     [self subButtonPress:nil];
 }
 

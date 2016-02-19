@@ -51,14 +51,16 @@
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, WIDTH, HEIGHT-64) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor = [UIColor clearColor];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"myCell"];
     [self.view addSubview:self.tableView];
     self.searchViewController = [[SearchViewController alloc]init];
-    UIButton *cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake((WIDTH-60)/2.0,HEIGHT-60,60 , 60)];
+    UIButton *cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake(0,0,200 , 50)];
+    cancelBtn.center = CGPointMake(WIDTH/2, HEIGHT-25);
     cancelBtn.backgroundColor = [UIColor cyanColor];
     [cancelBtn setTitle:@"Cancel" forState:UIControlStateNormal];
-    cancelBtn.layer.cornerRadius = 30.0f;
+    cancelBtn.layer.cornerRadius = 25.0f;
     [cancelBtn addTarget:self action:@selector(cancelButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelBtn];
     

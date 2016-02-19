@@ -32,10 +32,11 @@
     titleLabel.text = @"关于iWeather";
     [self.view addSubview:titleLabel];
     
-    UIButton *cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake((XWIDTH-60)/2.0,XHEIGHT-60,60 , 60)];
+    UIButton *cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake(0,0,200 , 50)];
+    cancelBtn.center = CGPointMake(XWIDTH/2, XHEIGHT-25);
     cancelBtn.backgroundColor = [UIColor cyanColor];
     [cancelBtn setTitle:@"Cancel" forState:UIControlStateNormal];
-    cancelBtn.layer.cornerRadius = 30.0f;
+    cancelBtn.layer.cornerRadius = 25.0f;
     [cancelBtn addTarget:self action:@selector(cancelButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelBtn];
     
