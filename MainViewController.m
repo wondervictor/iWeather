@@ -77,17 +77,13 @@
 
 //  推送内容
 @property (nonatomic, strong) NSString *notificationString;
-@end
 
-/**
-   *  plist 存储城市数据.
-   *  缓存.
- */
+@end
 
 static NSInteger counter = 0;
 
 @implementation MainViewController
-
+// 惰性加载
 - (CLLocationManager *)locationManager {
     if (_locationManager == nil) {
         self.locationManager = [[CLLocationManager alloc]init];
@@ -117,13 +113,12 @@ static NSInteger counter = 0;
     self.requestEngine = [[WeatherRequest alloc]initRequest];
     self.requestEngine.delegate = self;
    
-    
+    // 开始请求已有的城市
     for (NSString *name in self.cityListArray) {
-        NSLog(@"%@",name);
         [self.requestEngine startRequestWithCityName:name];
     }
     
-    //[self.requestEngine startRequestWithCityName:@"宜都"];
+    //  网络活动指示器
     OneHUD *hud = [[OneHUD alloc]initWithFrame:CGRectMake(0, 0, 150, 150) withPointDiameter:16 interval:0.25];
     hud.center = self.view.center;
     hud.tag = 211;
@@ -134,15 +129,21 @@ static NSInteger counter = 0;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.delegate = self;
     if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
+        // iOS8.0之后需要获取权限
         [self.locationManager requestWhenInUseAuthorization];
         [self.locationManager requestAlwaysAuthorization];
     }
-    
+    // 自定义TabBar
     CGFloat settingWidth = 150;
     if (XWIDTH <375) {
         settingWidth = 120;
     }
-    self.tabBar = [[TabBar alloc]initTabBarWithFrame:CGRectMake(0, XHEIGHT-50, XWIDTH, 50) withTotalRadius:settingWidth centerRadius:25 subRadius:20 centerImage:@"main" subImages:^(TabBar *tb)
+    self.tabBar = [[TabBar alloc]initTabBarWithFrame:CGRectMake(0, XHEIGHT-50, XWIDTH, 50)
+                                     withTotalRadius:settingWidth
+                                        centerRadius:25
+                                           subRadius:20
+                                         centerImage:@"main"
+                                           subImages:^(TabBar *tb)
     {
         [tb subButtonImage:@"search" withTag:0];
         [tb subButtonImage:@"add" withTag:1];
@@ -169,14 +170,14 @@ static NSInteger counter = 0;
     refreshBtn.layer.masksToBounds = YES;
     [refreshBtn setImage:[UIImage imageNamed:@"refresh"] forState:UIControlStateNormal];
     [self.view addSubview:refreshBtn];
-    
+    // 定位按钮
     UIButton *locationBtn = [[UIButton alloc]initWithFrame:CGRectMake(20, 22, 30, 30)];
     [locationBtn setImage:[UIImage imageNamed:@"location"] forState:UIControlStateNormal];
     locationBtn.layer.cornerRadius = 15.0f;
     locationBtn.layer.masksToBounds = YES;
     [locationBtn addTarget:self action:@selector(locationButtonPress:) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:locationBtn];
-    
+    // 注册通知
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedDataFromSearch:) name:@"GetNewCityNotification_2" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedDataFromAdd:) name:@"DidDeleteCityNotification" object:nil];
     
@@ -184,8 +185,9 @@ static NSInteger counter = 0;
     self.addViewController = [[AddViewController alloc]init];
     self.aboutViewController = [[AboutViewController alloc]init];
     self.settingViewController = [[SettingViewController alloc]init];
+    
     //  推送本地通知
-    UILocalNotification *weatherNotification = [[UILocalNotification alloc]init];
+     UILocalNotification *weatherNotification = [[UILocalNotification alloc]init];
     if (weatherNotification != nil) {
         weatherNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:0];
         weatherNotification.repeatInterval = kCFCalendarUnitDay;
@@ -197,10 +199,9 @@ static NSInteger counter = 0;
         weatherNotification.alertAction = @"查看";
     }
     [[UIApplication sharedApplication]scheduleLocalNotification:weatherNotification];
-    [self performSelector:@selector(writeDataToFile) withObject:nil afterDelay:5];
     
 }
-
+// 本想加进去网络请求，但为实现
 - (NSString *)notificationString {
     if (_notificationString == nil) {
         _notificationString = @"iWeather邀请你查看今日天气";
@@ -215,20 +216,24 @@ static NSInteger counter = 0;
 }
 
 - (void)loadCenterWeatherView:(NSDictionary *)weatherData {
-   //   58 页崩溃数据报告
+    // 58 页崩溃数据报告
+    // UI搭建必须在main_queue里，注意之前是否有dispatch_get_global——queue
     dispatch_async(dispatch_get_main_queue(), ^{
         counter ++ ;
-       // NSLog(@"---%lu",counter);
         [self.allCityWeather addObject:weatherData];   // 获取所有城市的天气信息
         RealTimeWeather *realTime = [[RealTimeWeather alloc]init];
-        [self.allCityWeather writeToFile:[self cityWeatherDataPath] atomically:YES];
         WeatherParse *parser = [WeatherParse sharedManager];
         realTime = [parser parseRealTimeWeather:weatherData];
         NSDictionary *dictForCondition = [parser parseForConditionView:weatherData];
         RealTimeView *realTimeView = [[RealTimeView alloc]initWithFrame:CGRectMake(XWIDTH*(counter-1), 0, XWIDTH,XHEIGHT-114 ) withRealTimeWeather:realTime withConditionData:dictForCondition];
         realTimeView.tag = 500+counter;
         [self.weatherScrollView addSubview:realTimeView];
-
+        if ([self.cityListArray count] == counter) {
+            [self writeDataToFile];    // 很笨的一种方式－－使用plist文件写入缓存
+                                    // 本想用NSURLSession来设置缓存，但程序一次会有多个不同的请求，会共用一个缓存。
+        }
+        else {
+        }
     });
    
 }
@@ -243,29 +248,27 @@ static NSInteger counter = 0;
         [self.cityListArray addObjectsFromArray:list];
     }
     else if (list == nil) {
-        [self.cityListArray addObjectsFromArray:@[@"北京",@"上海"]];
+        [self.cityListArray addObjectsFromArray:@[@"北京",@"上海"]]; // 如果用户删除所有城市或者第一次加载会默认选择北京上海
         [self.cityListArray writeToFile:[self cityListDataPath] atomically:YES
          ];
     }
-
     NSInteger num = [self.cityListArray count];
     return num;
 }
-
+// 城市列表文件存储－Plist
 - (NSString *)cityListDataPath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [paths objectAtIndex:0];
     return [path stringByAppendingPathComponent:@"citylist.plist"];
 }
-
+// 缓存文件存储-Plist
 - (NSString *)cityWeatherDataPath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [paths objectAtIndex:0];
     return [path stringByAppendingPathComponent:@"cache.plist"];
 }
-
+// 讲缓存文件转化为NSData才能写入Plist文件
 - (void)writeDataToFile {
-
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.allCityWeather];
     [data writeToFile:[self cityWeatherDataPath] atomically:YES];
     
@@ -288,9 +291,7 @@ static NSInteger counter = 0;
 
 - (void)subButton_0_Action {
 
-    [self presentViewController:self.searchViewController animated:YES completion:^{
-        NSLog(@"search view controller");
-    }];
+    [self presentViewController:self.searchViewController animated:YES completion:nil];
     
 }
 
@@ -303,8 +304,8 @@ static NSInteger counter = 0;
 }
 
 - (void)subButton_2_Action {
-[self presentViewController:self.settingViewController animated:YES completion:^{
-    NSLog(@"setting View Controller");
+    [self presentViewController:self.settingViewController animated:YES completion:^{
+        NSLog(@"setting View Controller");
 }];
 }
 
@@ -319,14 +320,15 @@ static NSInteger counter = 0;
     WeatherParse *parser = [WeatherParse sharedManager];
     self.currentWeekWeatherList = [parser getWeekWeatherArray:[self.allCityWeather objectAtIndex:self.currentSequence ] ];
     ARSPopover *popoverController = [ARSPopover new];
-        popoverController.sourceView = sender;
+    popoverController.sourceView = sender;
     popoverController.sourceRect =CGRectMake(CGRectGetMidX(sender.bounds), CGRectGetMaxY(sender.bounds)-40, 0, 0);
-    popoverController.contentSize = CGSizeMake(XWIDTH, 230);
+    popoverController.contentSize = CGSizeMake(XWIDTH, 360);
     popoverController.arrowDirection = UIPopoverArrowDirectionDown;
     [self presentViewController:popoverController animated:YES completion:^{
         [popoverController insertContentIntoPopover:^(ARSPopover *popover, CGSize popoverPresentedSize, CGFloat popoverArrowHeight) {
-            UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 10, 320, 210) style:UITableViewStylePlain ];
-            tableView.center = CGPointMake(XWIDTH/2, 115);
+            
+            UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 350) style:UITableViewStylePlain ];
+            tableView.center = CGPointMake(XWIDTH/2, 175);
             tableView.tag = 111;
             tableView.delegate = self;
             tableView.dataSource = self;
@@ -401,7 +403,7 @@ static NSInteger counter = 0;
 
 
 #pragma mark  - WeatherRequestDelegate
-
+// 天气请求的代理方法
 - (void)weatherRequestFinished:(NSDictionary *)data withError:(NSString *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 
@@ -429,7 +431,6 @@ static NSInteger counter = 0;
                 NSData *data = [[NSData alloc]initWithContentsOfFile:[self cityWeatherDataPath] ];
                 NSArray *tempArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
                 for (NSDictionary *dict in tempArray) {
-                    NSLog(@"%@",dict);
                     [self loadCenterWeatherView:dict];
                 }
             }];
@@ -567,11 +568,10 @@ static NSInteger counter = 0;
 
     return 1;
 }
-
+// 由于MainViewController有两个表示图－－采用View Tag来标示
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView.tag == 111) {
-        return 30;
-
+        return 50;
     }
     else if (tableView.tag == 222) {
         return 40;
@@ -600,13 +600,9 @@ static NSInteger counter = 0;
     WeekWeather *weather = [self.currentWeekWeatherList objectAtIndex:indexPath.row];
     NSArray *day = weather.dayWeather;
     cell.backgroundColor = [UIColor clearColor];
-    cell.date.text = weather.date;   //  在iPhone4s上模拟有点问题。
+    cell.date.text = weather.date;
     cell.date.textColor = [UIColor grayColor];
     cell.image.image = [self configureImage:[day objectAtIndex:0]];
-    CGRect frame = cell.image.frame;
-    frame.size.height = 30.0;
-    frame.size.width = 30.0;
-    cell.image.frame = frame;
     cell.temp.text = [NSString stringWithFormat:@"%@°",[day objectAtIndex:2]];
     cell.temp.textColor = [UIColor orangeColor];
     cell.weather.font = [UIFont systemFontOfSize:15];
@@ -636,10 +632,9 @@ static NSInteger counter = 0;
 }
 
 #pragma mark - UITableViewDelegate
-// Location - TableView 的选中事件
+// Location - TableView 的选中事件--未完成
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView.tag == 222) {
-        NSLog(@"%@",[self.cityListArray objectAtIndex:indexPath.row]);
     }
 }
 
@@ -650,7 +645,6 @@ static NSInteger counter = 0;
     [self.allCityWeather removeAllObjects];     // 清空
     for (NSInteger i=1;i<=[self.cityListArray count];i++) {
         RealTimeView *view = [self.view viewWithTag:(500+i)];
-        NSLog(@"%@",[self.cityListArray objectAtIndex:i-1]);
         [view removeFromSuperview];
         [self.requestEngine startRequestWithCityName:[self.cityListArray objectAtIndex:i-1]];
     }

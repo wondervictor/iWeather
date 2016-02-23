@@ -113,7 +113,7 @@
     
     // Do any additional setup after loading the view.
 }
-
+// 设置热门城市
 - (void)searchHotCity:(UIButton *)sender {
     if ([sender.titleLabel.text isEqualToString:@"北京"]) {
         [self.requestEngine startRequestWithCityName:@"北京"];
@@ -139,8 +139,7 @@
 }
 
 - (void)handleSwipe:(UISwipeGestureRecognizer *)sender {
-    [[self.scrollView.subviews lastObject]removeFromSuperview];
-    [self.scrollView removeFromSuperview];
+    [self backButtonPress:nil];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -260,6 +259,8 @@
     
 
 }
+
+
 
 - (void)backButtonPress:(UIButton *)sender {
     [sender removeFromSuperview];

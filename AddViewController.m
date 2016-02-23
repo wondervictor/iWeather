@@ -45,7 +45,6 @@
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addItemsToArray:) name:@"GetNewCityNotification_1" object:nil];
     
-    //NSArray *list = @[@"one",@"two",@"three"];
     self.cityList = [[NSMutableArray alloc]init];
     [self.cityList addObjectsFromArray:self.list];
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, WIDTH, HEIGHT-64) style:UITableViewStylePlain];
@@ -56,6 +55,7 @@
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"myCell"];
     [self.view addSubview:self.tableView];
     self.searchViewController = [[SearchViewController alloc]init];
+    
     UIButton *cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake(0,0,200 , 50)];
     cancelBtn.center = CGPointMake(WIDTH/2, HEIGHT-25);
     cancelBtn.backgroundColor = [UIColor orangeColor];
@@ -80,7 +80,7 @@
     [self presentViewController:self.searchViewController animated:YES completion:nil];
     
 }
-
+// 删除按钮的简单动画
 - (void)deleteItems:(UIBarButtonItem *)sender {
     if (self.tableView.editing == YES) {
         [UIView animateWithDuration:0.4f animations:^{

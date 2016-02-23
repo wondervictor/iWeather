@@ -5,6 +5,7 @@
 //  Created by VicChan on 16/2/17.
 //  Copyright © 2016年 VicChan. All rights reserved.
 //
+// 这个类的命名是个错误 WeekViewCell
 
 #import <UIKit/UIKit.h>
 
