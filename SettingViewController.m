@@ -11,6 +11,8 @@
 #define HEIGHT  self.view.frame.size.height
 #define DEFAULT_COLOR [UIColor colorWithRed:74/255.0 green:74/255.0 blue:74/255.0 alpha:1.0]
 
+/*****   未完成   ****/
+
 
 #import "SettingViewController.h"
 
