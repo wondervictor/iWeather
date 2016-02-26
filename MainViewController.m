@@ -114,16 +114,16 @@ static NSInteger counter = 0;
     self.requestEngine.delegate = self;
    
     // 开始请求已有的城市
+    OneHUD *hud = [[OneHUD alloc]initWithFrame:CGRectMake(0, 0, 150, 150) withPointDiameter:16 interval:0.25];
+    hud.center = self.view.center;
+    hud.tag = 211;
+    [self.view addSubview:hud];
     for (NSString *name in self.cityListArray) {
         [self.requestEngine startRequestWithCityName:name];
     }
     
     //  网络活动指示器
-    OneHUD *hud = [[OneHUD alloc]initWithFrame:CGRectMake(0, 0, 150, 150) withPointDiameter:16 interval:0.25];
-    hud.center = self.view.center;
-    hud.tag = 211;
-    [self.view addSubview:hud];
-    
+
     
     // Core Location
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
