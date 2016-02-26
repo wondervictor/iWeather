@@ -196,7 +196,7 @@ static NSInteger counter = 0;
         weatherNotification.alertTitle = @"今日天气";
         weatherNotification.soundName =UILocalNotificationDefaultSoundName;
         weatherNotification.applicationIconBadgeNumber = 1;
-        weatherNotification.alertAction = @"查看";
+        weatherNotification.category = @"CATEGORY";
     }
     [[UIApplication sharedApplication]scheduleLocalNotification:weatherNotification];
     
@@ -500,6 +500,7 @@ static NSInteger counter = 0;
                     UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         
                         [self.cityListArray addObject:self.locationCityName];
+                        
                         self.weatherScrollView.contentSize = CGSizeMake(XWIDTH*[self.cityListArray count], XHEIGHT -114);
                         [self subButtonPress:nil];
                     }];

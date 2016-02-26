@@ -169,7 +169,6 @@
 - (void)weatherRequestFinished:(NSDictionary *)data withError:(NSString *)error {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     if (!error) {
-       
         [self loadResultView:data];
     }
     else if ([error isEqualToString:@"1"])
@@ -184,8 +183,17 @@
         [self presentViewController:alert animated:YES completion:nil];
         });
     }
-    else if ([error isEqualToString:@"2"])
+    else if ([error isEqualToString:@"2"]||[error isEqualToString:@"3"])
     {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示信息" message:@"网络故障" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                self.searchBar.text = @"";
+            }];
+            [alert addAction:cancelAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        });
+        
        //  网络故障
     }
 }

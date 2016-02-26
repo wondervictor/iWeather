@@ -26,6 +26,13 @@
 
 @implementation AddViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    NSLog(@"%@",self.list);
+    self.cityList = [[NSMutableArray alloc]init];
+    [self.cityList addObjectsFromArray:self.list];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -44,9 +51,6 @@
     [self.view addSubview:self.navigationBar];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addItemsToArray:) name:@"GetNewCityNotification_1" object:nil];
-    
-    self.cityList = [[NSMutableArray alloc]init];
-    [self.cityList addObjectsFromArray:self.list];
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, WIDTH, HEIGHT-64) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -70,7 +74,8 @@
 - (void)cancelButtonClick:(UIButton *)sender {
     
     [self dismissViewControllerAnimated:YES completion:^{
-        NSLog(@"search view controller back to master view controller");
+        self.list = nil;
+        self.cityList = nil;
     }];
     
 }

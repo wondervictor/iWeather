@@ -28,7 +28,7 @@
         if (data != nil) {
             WeatherParse *paser = [WeatherParse sharedManager];
             NSDictionary *dict = [paser getWeatherData:data];
-            if ([data isEqual:[NSNull null]]) {
+            if ([data isEqual:[NSNull null]]||[dict isEqual:[NSNull null]]) {
                 [_delegate weatherRequestFinished:nil withError:@"1"];
             }
             else{
@@ -40,7 +40,6 @@
             [_delegate weatherRequestFinished:nil withError:@"3"];
         }
     } withError:^(NSError *error) {
-        NSLog(@"def3");
         [_delegate weatherRequestFinished:nil withError:@"2"];
     }];
 }
