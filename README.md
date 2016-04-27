@@ -9,3 +9,13 @@
 
 > 天气数据API供应商： [聚合数据](https://www.juhe.cn/)   
 > 开发时间：2016年2月10日～2月19日  
+
+示例图片：
+
+![main-1](https://github.com/wondervictor/iWeather/blob/master/iWeather/main-1.png?raw=true)
+
+![main-2](https://github.com/wondervictor/iWeather/blob/master/iWeather/main-2.png?raw=true)
+
+![main-3](https://github.com/wondervictor/iWeather/blob/master/iWeather/main-3.png?raw=true)
+
+![main-4](https://github.com/wondervictor/iWeather/blob/master/iWeather/main-4.png?raw=true)
